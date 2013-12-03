@@ -3,6 +3,18 @@
 
     <string name="app_name">SolitaireBairdFinal</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="lefDeck">Left Over Deck</string>
+    <string name="lefDeckup">Left Over Deck\'s showing cards</string>
+    <string name="spadeDes">Stack for Spades</string>
+    <string name="clubDes">Stack for Clubs</string>
+    <string name="diamondDes">Stack for Diamonds</string>
+    <string name="heartDes">Stack for Hearts</string>
+    <string name="stackOneDes">Stack of Cards One</string>
+    <string name="stackTwoDes">Stack of Cards Two</string>
+    <string name="stackThreeDes">Stack of Cards Three</string>
+    <string name="stackFourDes">Stack of Cards Four</string>
+    <string name="stackFiveDes">Stack of Cards Five</string>
+    <string name="stackSixDes">Stack of Cards Six</string>
+    <string name="stackSevenDes">Stack of Cards Seven</string>
 
 </resources>
