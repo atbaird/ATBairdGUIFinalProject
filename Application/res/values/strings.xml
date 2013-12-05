@@ -17,4 +17,6 @@
     <string name="stackSixDes">Stack of Cards Six</string>
     <string name="stackSevenDes">Stack of Cards Seven</string>
 
+    <string name="new_game">New Game</string>
+    <string name="score">Score: </string>
 </resources>

@@ -19,6 +19,7 @@ public final class R {
          */
         public static final int activity_horizontal_margin=0x7f040000;
         public static final int activity_vertical_margin=0x7f040001;
+        public static final int font_size=0x7f040002;
     }
     public static final class drawable {
         public static final int ace_clubs=0x7f020000;
@@ -82,14 +83,17 @@ public final class R {
         public static final int two_spades=0x7f02003a;
     }
     public static final class id {
-        public static final int action_settings=0x7f08000d;
+        public static final int action_settings=0x7f080010;
+        public static final int cardImageHold=0x7f08000f;
         public static final int leftOverDeck=0x7f080000;
+        public static final int new_game=0x7f08000d;
+        public static final int score=0x7f08000e;
         public static final int showOverDeck=0x7f080001;
         public static final int stackClubs=0x7f080003;
         public static final int stackDiamonds=0x7f080004;
+        public static final int stackFive=0x7f08000a;
         public static final int stackFour=0x7f080009;
         public static final int stackHearts=0x7f080005;
-        public static final int stackOFive=0x7f08000a;
         public static final int stackOne=0x7f080006;
         public static final int stackSeven=0x7f08000c;
         public static final int stackSix=0x7f08000b;
@@ -111,6 +115,8 @@ public final class R {
         public static final int heartDes=0x7f050007;
         public static final int lefDeck=0x7f050002;
         public static final int lefDeckup=0x7f050003;
+        public static final int new_game=0x7f05000f;
+        public static final int score=0x7f050010;
         public static final int spadeDes=0x7f050004;
         public static final int stackFiveDes=0x7f05000c;
         public static final int stackFourDes=0x7f05000b;
