@@ -1,0 +1,189 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <RelativeLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="85dp"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/stackOne"
+            android:layout_width="90dp"
+            android:layout_height="70dp"
+            android:rotation="90"
+            android:contentDescription="@string/stackOneDes"
+            android:src="@drawable/no_card" />
+
+        <ImageView
+            android:id="@+id/stackTwo"
+            android:layout_width="90dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="60dp"
+            android:contentDescription="@string/stackTwoDes"
+            android:rotation="90"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card" />
+
+        <ImageView
+            android:id="@+id/stackThree"
+            android:layout_width="90dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="120dp"
+            android:contentDescription="@string/stackThreeDes"
+            android:rotation="90"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card" />
+
+        <ImageView
+            android:id="@+id/stackFour"
+            android:layout_width="90dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="180dp"
+            android:contentDescription="@string/stackFourDes"
+            android:rotation="90"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card" />
+
+        <ImageView
+            android:id="@+id/stackFive"
+            android:layout_width="90dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="240dp"
+            android:contentDescription="@string/stackFiveDes"
+            android:rotation="90"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card" />
+
+        <ImageView
+            android:id="@+id/stackSix"
+            android:layout_width="90dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="300dp"
+            android:contentDescription="@string/stackSixDes"
+            android:rotation="90"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card" />
+
+        <ImageView
+            android:id="@+id/stackSeven"
+            android:layout_width="90dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="360dp"
+            android:contentDescription="@string/stackSevenDes"
+            android:rotation="90"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/cardImageHold"
+        android:layout_width="90dp"
+        android:layout_height="70dp"
+        android:rotation="90"
+        android:src="@drawable/blank" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/linearLayout1"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/leftOverDeck"
+            android:layout_width="90dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/lefDeck"
+            android:rotation="90"
+            android:scaleType="fitCenter"
+            android:src="@drawable/card_back" />
+
+        <ImageView
+            android:id="@+id/showOverDeck"
+            android:layout_width="90dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/lefDeckup"
+            android:rotation="90"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card" />
+
+        <ImageView
+            android:id="@+id/stackSpades"
+            android:layout_width="90dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/spadeDes"
+            android:rotation="90"
+            android:layout_marginTop="30dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card_spade" />
+
+        <ImageView
+            android:id="@+id/stackClubs"
+            android:layout_width="90dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/clubDes"
+            android:rotation="90"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card_club" />
+
+        <ImageView
+            android:id="@+id/stackDiamonds"
+            android:layout_width="90dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/diamondDes"
+            android:rotation="90"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card_diamond" />
+
+        <ImageView
+            android:id="@+id/stackHearts"
+            android:layout_width="90dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/heartDes"
+            android:rotation="90"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card_heart" />
+    </LinearLayout>
+    
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignLeft="@+id/cardImageHold"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/new_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="20dp"
+            android:rotation="90"
+            android:text="@string/new_game"
+            android:textSize="@dimen/font_size" />
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/new_game"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="61dp"
+            android:rotation="90"
+            android:text="@string/score" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

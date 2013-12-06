@@ -12,19 +12,19 @@ import android.widget.ImageView;
 
 public class MainActivity extends Activity {
 
-	Stack stackOne, stackTwo, stackThree, stackFour, stackFive, stackSix, stackSeven;
-	Stack stackHearts, stackDiamonds, stackClubs, stackSpades;
-	DrawDeck clickDeck;
-	
+	public Stack stackOne, stackTwo, stackThree, stackFour, stackFive, stackSix, stackSeven;
+	public Stack stackHearts, stackDiamonds, stackClubs, stackSpades;
+	public DrawDeck clickDeck;
+	public Deck deck;
+	public int index = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		//
 		Context me = getApplicationContext();
-		Deck deck = new Deck(52, me);
-		Card[] cards = deck.getDeck();
+		deck = new Deck(me);
+		ArrayList<Card> cards = deck.getDeck();
 		ArrayList<Card> cardsOne = new ArrayList<Card>();
 		ArrayList<Card> cardsTwo = new ArrayList<Card>();
 		ArrayList<Card> cardsThree = new ArrayList<Card>();
@@ -33,23 +33,24 @@ public class MainActivity extends Activity {
 		ArrayList<Card> cardsSix = new ArrayList<Card>();
 		ArrayList<Card> cardsSeven = new ArrayList<Card>();
 		ArrayList<Card> cardsRest = new ArrayList<Card>();
-		for(int i = 0; i < cards.length; i++) {
+		for(int i = 0; i < cards.size(); i++) {
+			Card temp = cards.get(i);
 			if(cardsOne.size() < 1) {
-				cardsOne.add(cards[i]);
+				cardsOne.add(temp);
 			} else if(cardsTwo.size() < 2) {
-				cardsTwo.add(cards[i]);
+				cardsTwo.add(temp);
 			} else if(cardsThree.size() < 3) {
-				cardsThree.add(cards[i]);
+				cardsThree.add(temp);
 			} else if(cardsFour.size() < 4) {
-				cardsFour.add(cards[i]);
+				cardsFour.add(temp);
 			} else if(cardsFive.size() < 5) {
-				cardsFive.add(cards[i]);
+				cardsFive.add(temp);
 			} else if(cardsSix.size() < 6) {
-				cardsSix.add(cards[i]);
+				cardsSix.add(temp);
 			} else if(cardsSeven.size() < 7) {
-				cardsSeven.add(cards[i]);
+				cardsSeven.add(temp);
 			} else {
-				cardsRest.add(cards[i]);
+				cardsRest.add(temp);
 			}
 		}
 		ImageView imageStackOne = (ImageView)findViewById(R.id.stackOne);
