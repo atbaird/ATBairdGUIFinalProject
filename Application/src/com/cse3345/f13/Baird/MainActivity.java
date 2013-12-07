@@ -53,6 +53,9 @@ public class MainActivity extends Activity {
 				cardsRest.add(temp);
 			}
 		}
+		
+		ImageView tempImage = (ImageView)findViewById(R.id.cardImageHold);
+		
 		ImageView imageStackOne = (ImageView)findViewById(R.id.stackOne);
 		ImageView imageStackTwo = (ImageView)findViewById(R.id.stackTwo);
 		ImageView imageStackThree = (ImageView)findViewById(R.id.stackThree);
@@ -61,29 +64,17 @@ public class MainActivity extends Activity {
 		ImageView imageStackSix = (ImageView)findViewById(R.id.stackSix);
 		ImageView imageStackSeven = (ImageView)findViewById(R.id.stackSeven);
 		
-		stackOne = new Stack(cardsOne, imageStackOne, false);
-		stackTwo = new Stack(cardsTwo, imageStackTwo, false);
-		stackThree = new Stack(cardsThree, imageStackThree, false);
-		stackFour = new Stack(cardsFour, imageStackFour, false);
-		stackFive = new Stack(cardsFive, imageStackFive, false);
-		stackSix = new Stack(cardsSix, imageStackSix, false);
-		stackSeven = new Stack(cardsSeven, imageStackSeven, false);
+		stackOne = new Stack(cardsOne, imageStackOne, false, tempImage);
+		stackTwo = new Stack(cardsTwo, imageStackTwo, false, tempImage);
+		stackThree = new Stack(cardsThree, imageStackThree, false, tempImage);
+		stackFour = new Stack(cardsFour, imageStackFour, false, tempImage);
+		stackFive = new Stack(cardsFive, imageStackFive, false, tempImage);
+		stackSix = new Stack(cardsSix, imageStackSix, false, tempImage);
+		stackSeven = new Stack(cardsSeven, imageStackSeven, false, tempImage);
 		
 		ImageView imageDrawDeck = (ImageView)findViewById(R.id.leftOverDeck);
 		ImageView imageDrawDeckTwo = (ImageView)findViewById(R.id.showOverDeck);
-		clickDeck = new DrawDeck(cardsRest, imageDrawDeck, imageDrawDeckTwo, me);
-		
-		imageDrawDeck.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				int one = clickDeck.getCurrentSizeOne();
-				int two = clickDeck.getCurrentSizeTwo();
-				if(one != 0 || two != 0) {
-					clickDeck.drawThree();
-				}
-			}
-		});
+		clickDeck = new DrawDeck(cardsRest, imageDrawDeck, imageDrawDeckTwo, me, tempImage);
 		
 	}
 

@@ -3,6 +3,9 @@ package com.cse3345.f13.Baird;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
 //for the extra cards you can pull from.
@@ -12,7 +15,8 @@ public class DrawDeck {
 	ImageView backCards;
 	ImageView frontCards;
 	Context myContext;
-	public DrawDeck(ArrayList<Card> a, ImageView b, ImageView c, Context d) {
+	ImageView dragger;
+	public DrawDeck(ArrayList<Card> a, ImageView b, ImageView c, Context d, ImageView e) {
 		popMe = a;
 		holder = new ArrayList<Card>();
 		myContext = d;
@@ -20,38 +24,58 @@ public class DrawDeck {
 		backCards.setImageResource(R.drawable.card_back);
 		frontCards = c;
 		frontCards.setImageResource(R.drawable.no_card);
+		dragger = e;
+		
+		backCards.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				int one = getCurrentSizeOne();
+				int two = getCurrentSizeTwo();
+				if(one != 0 || two != 0) {
+					drawThree();
+				}
+			}
+		});
 	}
 	public void drawThree() {
-		if(popMe.size() == 0) {
+		int sizePop = popMe.size();
+		//
+		if(sizePop == 0) {
 			moveBackToDeck();
-		} else {
-			int size = 3;
-			if(popMe.size() < 3) {
-				size = popMe.size();
-			}
-			int a = 0;
-			int b = 0;
-			for(int i = popMe.size() - 1-size; i < popMe.size(); i++) {
-				if(a == 0) {
-					b = i;
-				}
+		} else if(sizePop == 1) {
+			holder.add(popMe.get(0));
+			popMe.remove(0);
+		}else if(sizePop == 2) {
+			for(int i = popMe.size() -1; i > sizePop-3; i--) {
 				holder.add(popMe.get(i));
-				popMe.remove(b);
-				a++;
+				popMe.remove(i);
 			}
-			if(popMe.size() == 0) {
-				backCards.setImageResource(R.drawable.no_card);
+		} else{
+			for(int i = popMe.size() -1; i > sizePop- 4; i--) {
+				holder.add(popMe.get(i));
+				popMe.remove(i);
 			}
+		}
+		
+		if(popMe.size() == 0) {
+			backCards.setImageResource(R.drawable.no_card);
+		} else {
+			backCards.setImageResource(R.drawable.card_back);
+		}
+		if(holder.size() == 0) {
+			frontCards.setImageResource(R.drawable.no_card);
+		} else {
 			frontCards.setImageDrawable(holder.get(holder.size()-1).determineDrawable());
 		}
 	}
 	public void moveBackToDeck() {
-		for(int j = 0; j < holder.size(); j++) {
-			popMe.add(holder.get(0));
-			holder.remove(0);
+		if(holder.size() > 0) {
+			while(holder.size() > 0) {
+				popMe.add(holder.get(holder.size() -1));
+				holder.remove(holder.size() -1);
+			}
 		}
-		backCards.setImageResource(R.drawable.card_back);
-		frontCards.setImageResource(R.drawable.no_card);
 	}
 	public int getCurrentSizeOne() {
 		return popMe.size();
