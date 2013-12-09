@@ -15,80 +15,59 @@ public class Stack {
 	public ArrayList<Card> cardStack;
 	ImageView stack;
 	boolean isSuitStack;
-	ImageView dragger;
-	public Stack(ArrayList<Card> a, ImageView b, boolean c, ImageView d) {
+	int suit;
+	public Stack(ArrayList<Card> a, ImageView b, boolean c, int e) {
 		cardStack = a;
 		stack = b;
 		isSuitStack = c;
-		dragger = d;
+		suit = e;
 		if(cardStack.size() > 0) {
 			stack.setImageDrawable(cardStack.get(cardStack.size()-1).determineDrawable());
 		} else if(cardStack.size() == 0 && isSuitStack == false){
 			stack.setImageResource(R.drawable.no_card);
 		}
-		
-		/*stack.setOnTouchListener(new OnTouchListener() {
-			public boolean onTouch(View view, MotionEvent motionEvent) {
-				if(dragger.getId() == ((ImageView)view).getId()) {
-					if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-						if(cardStack.size() > 1) {
-							dragger.setImageDrawable(stack.getDrawable());
-							ClipData data = ClipData.newPlainText("", "");
-							DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(dragger);
-							Card temp = cardStack.get(cardStack.size() -1);
-							((ImageView)view).setImageDrawable(cardStack.get(cardStack.size()-2).determineDrawable());
-							view.startDrag(data, shadowBuilder, dragger, 0);
-						
-							return true;
-						} else if(cardStack.size() == 1) {
-							dragger.setImageDrawable(stack.getDrawable());
-							Card temp = cardStack.get(cardStack.size() -1);
-							((ImageView)view).setImageResource(R.drawable.no_card);
-							return true;
-						} else {
-							return false;
-						}
-					} else {
-						return false;
-					}
-				} else {
-					return false;
-				}
-			}
-		});*/
 	}
 	public void addCard(Card b) {
 		cardStack.add(b);
 		stack.setImageDrawable(cardStack.get(cardStack.size()-1).determineDrawable());
 	}
 	public Card removeTopCard() {
-		Card b = cardStack.get(cardStack.size() - 1);
-		cardStack.remove(cardStack.size()-1);
-		stack.setImageDrawable(cardStack.get(cardStack.size()-1).determineDrawable());
-		return b;
-	}
-	public Card getTopCard() {
-		if(cardStack.size() > 1) {
-			return cardStack.get(cardStack.size() - 1);
+		if(cardStack.size() > 0) {
+			Card temp = cardStack.get(cardStack.size() -1);
+			cardStack.remove(cardStack.size() -1);
+			if(cardStack.size() > 0) {
+				stack.setImageDrawable(cardStack.get(cardStack.size()-1).determineDrawable());
+			} else if(isSuitStack == false){
+				stack.setImageResource(R.drawable.no_card);
+			} else {
+				switch(suit) {
+					case 0:
+						stack.setImageResource(R.drawable.no_card_spade);
+						break;
+					case 1:
+						stack.setImageResource(R.drawable.no_card_club);
+						break;
+					case 2:
+						stack.setImageResource(R.drawable.no_card_diamond);
+						break;
+					case 3:
+						stack.setImageResource(R.drawable.no_card_heart);
+						break;
+				}
+			}
+			return temp;
 		}
 		return null;
 	}
-	public void verifyCardCanAdd(Card c) {
-		//this method will verify that you can add the card, and then if can, will perform the correct operations to do so.
-		Card ourTopCard = getTopCard();
-		if(isSuitStack == true) {
-			if(ourTopCard == null) {
-				if(c.getNumber() == 0) {
-					
-				}
-			}
-			else if(ourTopCard.getSuit() == c.getSuit()) {
-				if(ourTopCard.getNumber() == c.getNumber()-1) {
-					
-				}
-			}
-		} else {
-			
+	
+	public Card getTopCard() {
+		if(cardStack.size() > 0) {
+			Card temp = cardStack.get(cardStack.size() -1);
+			return temp;
 		}
+		return null;
+	}
+	public ArrayList<Card> getStack() {
+		return cardStack;
 	}
 }

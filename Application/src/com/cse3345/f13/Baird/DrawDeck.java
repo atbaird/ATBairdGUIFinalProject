@@ -25,18 +25,6 @@ public class DrawDeck {
 		frontCards = c;
 		frontCards.setImageResource(R.drawable.no_card);
 		dragger = e;
-		
-		backCards.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				int one = getCurrentSizeOne();
-				int two = getCurrentSizeTwo();
-				if(one != 0 || two != 0) {
-					drawThree();
-				}
-			}
-		});
 	}
 	public void drawThree() {
 		int sizePop = popMe.size();
@@ -82,5 +70,36 @@ public class DrawDeck {
 	}
 	public int getCurrentSizeTwo() {
 		return holder.size();
+	}
+	public void returnCardToDeck(Card a) {
+		holder.add(a);
+		frontCards.setImageDrawable(holder.get(holder.size() -1).determineDrawable());
+	}
+	public Card getTopCard() {
+		if(holder.size() > 0) {
+			Card temp = holder.get(holder.size() -1);
+			return temp;
+		}
+		return null;
+	}
+	public Card removeTopCard() {
+		if(holder.size() > 0) {
+			Card temp = holder.get(holder.size() -1);
+			holder.remove(holder.size() -1);
+			if(holder.size() > 0) {
+				frontCards.setImageDrawable(holder.get(holder.size()-1).determineDrawable());
+			} else {
+				frontCards.setImageResource(R.drawable.no_card);
+			}
+			return temp;
+		}
+		return null;
+	}
+	
+	public ArrayList<Card> getPopMe() {
+		return popMe;
+	}
+	public ArrayList<Card> getHolder() {
+		return holder;
 	}
 }

@@ -177,7 +177,7 @@
             android:rotation="90"
             android:text="@string/new_game"
             android:textSize="@dimen/font_size" />
-
+        
         <TextView
             android:id="@+id/score"
             android:layout_width="wrap_content"
@@ -186,6 +186,17 @@
             android:layout_centerVertical="true"
             android:rotation="90"
             android:text="@string/score" />
+
+        <TextView
+            android:id="@+id/tempHolder"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/new_game"
+            android:layout_marginTop="28dp"
+            android:drawableBottom="@drawable/no_card"
+            android:rotation="90"
+            android:text="@string/cardHolder" />
 
     </RelativeLayout>
 

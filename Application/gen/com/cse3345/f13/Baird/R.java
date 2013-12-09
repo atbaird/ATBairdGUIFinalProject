@@ -84,7 +84,7 @@ public final class R {
         public static final int two_spades=0x7f02003b;
     }
     public static final class id {
-        public static final int action_settings=0x7f080011;
+        public static final int action_settings=0x7f080012;
         public static final int cardImageHold=0x7f080008;
         public static final int leftOverDeck=0x7f080009;
         public static final int linearLayout1=0x7f080000;
@@ -102,6 +102,7 @@ public final class R {
         public static final int stackSpades=0x7f08000b;
         public static final int stackThree=0x7f080003;
         public static final int stackTwo=0x7f080002;
+        public static final int tempHolder=0x7f080011;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -112,13 +113,14 @@ public final class R {
     public static final class string {
         public static final int action_settings=0x7f050001;
         public static final int app_name=0x7f050000;
+        public static final int cardHolder=0x7f05000f;
         public static final int clubDes=0x7f050005;
         public static final int diamondDes=0x7f050006;
         public static final int heartDes=0x7f050007;
         public static final int lefDeck=0x7f050002;
         public static final int lefDeckup=0x7f050003;
-        public static final int new_game=0x7f05000f;
-        public static final int score=0x7f050010;
+        public static final int new_game=0x7f050010;
+        public static final int score=0x7f050011;
         public static final int spadeDes=0x7f050004;
         public static final int stackFiveDes=0x7f05000c;
         public static final int stackFourDes=0x7f05000b;
