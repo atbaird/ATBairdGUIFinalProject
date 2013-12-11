@@ -2,11 +2,6 @@ package com.cse3345.f13.Baird;
 
 import java.util.ArrayList;
 
-import android.content.ClipData;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.DragShadowBuilder;
-import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 
 //Stack Class
@@ -25,6 +20,33 @@ public class Stack {
 			stack.setImageDrawable(cardStack.get(cardStack.size()-1).determineDrawable());
 		} else if(cardStack.size() == 0 && isSuitStack == false){
 			stack.setImageResource(R.drawable.no_card);
+		}
+	}
+	public int getStackSuit() {
+		return suit;
+	}
+	public void restoreStack(ArrayList<Card> a) {
+		cardStack = a;
+		if(cardStack.size() > 0) {
+			stack.setImageDrawable(cardStack.get(cardStack.size()-1).determineDrawable());
+			
+		}else if(isSuitStack == false) {
+			stack.setImageResource(R.drawable.no_card);
+		} else {
+			switch(suit) {
+			case 0:
+				stack.setImageResource(R.drawable.no_card_spade);
+				break;
+			case 1:
+				stack.setImageResource(R.drawable.no_card_club);
+				break;
+			case 2:
+				stack.setImageResource(R.drawable.no_card_diamond);
+				break;
+			case 3:
+				stack.setImageResource(R.drawable.no_card_heart);
+				break;
+			}
 		}
 	}
 	public void addCard(Card b) {

@@ -19,4 +19,12 @@
 	<string name="cardHolder">Card Holder</string>
     <string name="new_game">New Game</string>
     <string name="score">Score: </string>
+    <string name="highScoreButtonText">Highscores</string>
+    <string name="victory">Victory</string>
+    <string name="close">Close</string>
+    <string name="name">Enter Your Name</string>
+    <string name="returnMeText">Return</string>
+    <string name="test">test\ntest\ntest\ntest\ntest\n</string>
+    <string name="highscores_title">HighScores</string>
+    <string name="timerText">Time: </string>
 </resources>

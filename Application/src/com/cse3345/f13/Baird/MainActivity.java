@@ -1,55 +1,134 @@
 package com.cse3345.f13.Baird;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
+import android.view.View.OnDragListener;
+import android.view.View.OnTouchListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
+	public static final int HIGHSCORES = 120;
+	
+	private static final String IMAGEVIEW_TAG = "icon bitmap";
+
+	
+	static final String value1 = "hScore1";
+	static final String value2 = "hScore2";
+	static final String value3 = "hScore3";
+	static final String value4 = "hScore4";
+	static final String value5 = "hScore5";
+	static final String value6 = "hScoreName1";
+	static final String value7 = "hScoreName2";
+	static final String value8 ="hScoreName3";
+	static final String value9 = "hScoreName4";
+	static final String value10 = "hScoreName5";
+	
 	public Stack stackOne, stackTwo, stackThree, stackFour, stackFive, stackSix, stackSeven;
 	public Stack stackHearts, stackDiamonds, stackClubs, stackSpades;
 	public DrawDeck clickDeck;
 	public Deck deck;
-	public int index = 0;
 	public Card temp;
-	public int returnTo; // 0-6 = stacks one through seven; 7 = clickDeck; 8-11 Suit stacks (spade, club, diamond, heart)
-	public boolean checkClick;
-	public TextView tempHolder;
+
 	public Context myContext;
+	
+	public RelativeLayout victory;
+
 	public Drawable draw1;
-	static final String value1 = "deckPopMe";
-	static final String value2 = "deckHolder";
-	static final String value3 = "HeartsStack";
-	static final String value4 = "DiamondsStack";
-	static final String value5 = "ClubsStack";
-	static final String value6 = "SpadesStack";
-	static final String value7 = "StackOne";
-	static final String value8 = "StackTwo";
-	static final String value9 = "StackThree";
-	static final String value10 = "StackFour";
-	static final String value11 = "StackFive";
-	static final String value12 = "StackSix";
-	static final String value13 = "StackSeven";
-	static final String value14 = "CardHeld";
-	static final String value15 = "returnTo";
+	
+	public ImageView imageStackOne, imageStackTwo, imageStackThree, imageStackFour, imageStackFive, imageStackSix, imageStackSeven;
+	public ImageView imageSpade, imageClub, imageHeart, imageDiamond;
+	public ImageView imageDrawDeckTwo, imageDrawDeck;
+	public ImageView imageView;
+
+	public TextView tempHolder;
+	public TextView scor;
+	public TextView vicText;
+	public TextView timerText;
+
+	public EditText getName;
+	
+	public Button newGameButton;
+	public Button closeVic;
+	public Button openHighScores;
+	public Button highScores;
+
+	public Timer time;
+	
+	public int index;
+	public int score;
+	public int returnTo; // 0-6 = stacks one through seven; 7 = clickDeck; 8-11 Suit stacks (spade, club, diamond, heart)
+	public int timeSeconds;
+	public int highScore1;
+	public int highScore2;
+	public int highScore3;
+	public int highScore4;
+	public int highScore5;
+	
+	public boolean checkClick;
+	public boolean isPaused;
+	
+	public String highScoreName1;
+	public String highScoreName2;
+	public String highScoreName3;
+	public String highScoreName4;
+	public String highScoreName5;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		isPaused = false;
+		
+		closeVic = (Button)findViewById(R.id.closeVictory);
+		openHighScores = (Button)findViewById(R.id.openHighScores);
+		
+		victory = (RelativeLayout)findViewById(R.id.Victory);
+		victory.setVisibility(victory.INVISIBLE);
+		vicText = (TextView)findViewById(R.id.VictoryText);
+		
+		getName = (EditText)findViewById(R.id.yourName);
+		
 		myContext = getBaseContext();
 		draw1 = myContext.getResources().getDrawable(R.drawable.no_card);
 		temp = null;
 		checkClick = false;
 		returnTo = 0;
+		score = 0;
+		scor = (TextView)findViewById(R.id.score);
+		scor.setText("Score: " + score);
+		
+		highScore1 = 100;
+		highScore2 = 300;
+		highScore3 = 420;
+		highScore4 = 500;
+		highScore5 = 590;
+		highScoreName1 = "Freddy";
+		highScoreName2 = "Bill";
+		highScoreName3 = "Grace";
+		highScoreName4 = "Greg";
+		highScoreName5 = "Alex";
 		
 		Context me = getApplicationContext();
 		deck = new Deck(me);
@@ -85,13 +164,13 @@ public class MainActivity extends Activity {
 		
 		ImageView tempImage = (ImageView)findViewById(R.id.cardImageHold);
 		
-		ImageView imageStackOne = (ImageView)findViewById(R.id.stackOne);
-		ImageView imageStackTwo = (ImageView)findViewById(R.id.stackTwo);
-		ImageView imageStackThree = (ImageView)findViewById(R.id.stackThree);
-		ImageView imageStackFour = (ImageView)findViewById(R.id.stackFour);
-		ImageView imageStackFive = (ImageView)findViewById(R.id.stackFive);
-		ImageView imageStackSix = (ImageView)findViewById(R.id.stackSix);
-		ImageView imageStackSeven = (ImageView)findViewById(R.id.stackSeven);
+		imageStackOne = (ImageView)findViewById(R.id.stackOne);
+		imageStackTwo = (ImageView)findViewById(R.id.stackTwo);
+		imageStackThree = (ImageView)findViewById(R.id.stackThree);
+		imageStackFour = (ImageView)findViewById(R.id.stackFour);
+		imageStackFive = (ImageView)findViewById(R.id.stackFive);
+		imageStackSix = (ImageView)findViewById(R.id.stackSix);
+		imageStackSeven = (ImageView)findViewById(R.id.stackSeven);
 		
 		stackOne = new Stack(cardsOne, imageStackOne, false, 0);
 		stackTwo = new Stack(cardsTwo, imageStackTwo, false, 0);
@@ -106,45 +185,75 @@ public class MainActivity extends Activity {
 		ArrayList<Card> diamonds = new ArrayList<Card>();
 		ArrayList<Card> clubs = new ArrayList<Card>();
 		
-		ImageView imageSpade = (ImageView)findViewById(R.id.stackSpades);
-		ImageView imageClub = (ImageView)findViewById(R.id.stackClubs);
-		ImageView imageDiamond = (ImageView)findViewById(R.id.stackDiamonds);
-		ImageView imageHeart = (ImageView)findViewById(R.id.stackHearts);
+		imageSpade = (ImageView)findViewById(R.id.stackSpades);
+		imageClub = (ImageView)findViewById(R.id.stackClubs);
+		imageDiamond = (ImageView)findViewById(R.id.stackDiamonds);
+		imageHeart = (ImageView)findViewById(R.id.stackHearts);
 		
 		stackSpades = new Stack(spades, imageSpade, true, 0);
 		stackClubs = new Stack(clubs, imageClub, true, 1);
 		stackDiamonds = new Stack(diamonds, imageDiamond, true, 2);
 		stackHearts = new Stack(hearts, imageHeart, true, 3);
 		
-		ImageView imageDrawDeck = (ImageView)findViewById(R.id.leftOverDeck);
-		ImageView imageDrawDeckTwo = (ImageView)findViewById(R.id.showOverDeck);
+		imageDrawDeck = (ImageView)findViewById(R.id.leftOverDeck);
+		imageDrawDeckTwo = (ImageView)findViewById(R.id.showOverDeck);
 		clickDeck = new DrawDeck(cardsRest, imageDrawDeck, imageDrawDeckTwo, me, tempImage);
 		
 		tempHolder = (TextView)findViewById(R.id.tempHolder);
 		
+		
+		
 		//Normal Click Listeners
-		//Regular Spaces
-		imageStackOne.setOnClickListener(new OnClickListener() {
+		OnClickListener NormalOnClickListener = new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				//stackOne
+				
+				Stack myStack = stackOne;
+				ImageView myImage =(ImageView)v;
+				if(imageStackOne == myImage) {
+					myStack = stackOne;
+					index = 0;
+				} else if(imageStackTwo == myImage) {
+					myStack = stackTwo;
+					index = 1;
+				} else if(imageStackThree == myImage) {
+					myStack = stackThree;
+					index = 2;
+				} else if(imageStackFour == myImage) {
+					myStack = stackFour;
+					index = 3;
+				} else if (imageStackFive == myImage) {
+					myStack = stackFive;
+					index = 4;
+				} else if(imageStackSix == myImage) {
+					myStack = stackSix;
+					index = 5;
+				} else if(imageStackSeven == myImage){
+					myStack = stackSeven;
+					index = 6;
+				}
+					
+				
 				if(checkClick == false) {
-					temp = stackOne.removeTopCard();
+					temp = myStack.getTopCard();
 					if(temp != null) {
-						tempHolder.setCompoundDrawables(null, null, null, temp.determineDrawable());
-						returnTo = 0;
+						temp = myStack.removeTopCard();
+						tempHolder.setCompoundDrawablesWithIntrinsicBounds(null, null, null, temp.determineDrawable());
 						checkClick = true;
+						returnTo = index;
+						myImage.setBackgroundColor(myContext.getResources().getColor(R.color.yellow));
 					}
 				} else {
-					if(returnTo == 0) {
-						stackOne.addCard(temp);
+					if(returnTo == index) {
+						myStack.addCard(temp);
 						temp = null;
-						tempHolder.setCompoundDrawables(null,null,null, draw1);
+						tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null, draw1);
+						myImage.setBackgroundColor(myContext.getResources().getColor(R.color.white));
 						checkClick = false;
 					} else {
-						Card temp2 = stackSeven.getTopCard();
+						Card temp2 = myStack.getTopCard();
 						int suit1 = temp.getSuit();
 						int num1 = temp.getNumber();
 						if(temp2 != null) {
@@ -153,365 +262,121 @@ public class MainActivity extends Activity {
 							if(suit2 == 0 || suit2 == 1) {
 								if(suit1 == 2 || suit1 ==3) {
 									if(num2 == num1 + 1) {
-										stackOne.addCard(temp);
+										myStack.addCard(temp);
 										temp = null;
-										tempHolder.setCompoundDrawables(null,null,null,draw1);
+										tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null,draw1);
 										checkClick = false;
+										if(returnTo == 0) {
+											imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										} else if(returnTo == 1) {
+											imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										} else if(returnTo == 2) {
+											imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										} else if(returnTo == 3) {
+											imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										}else if (returnTo == 4) {
+											imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										}else if (returnTo ==5) {
+											imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										}else if (returnTo == 6) {
+											imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										} else if(returnTo == 7) {
+											imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										} else if(returnTo == 8) {
+											imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										} else if(returnTo == 9) {
+											imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										} else if(returnTo == 10) {
+											imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										}else if(returnTo == 11) {
+											imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										}
+										
 									}
 								}
 							} else {
 								if(suit1 == 0 || suit1 == 1) {
 									if(num2 == num1 + 1) {
-										stackOne.addCard(temp);
+										myStack.addCard(temp);
 										temp = null;
-										tempHolder.setCompoundDrawables(null,null,null,draw1);
+										tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null,draw1);
 										checkClick = false;
+										if(returnTo == 0) {
+											imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										} else if(returnTo == 1) {
+											imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										} else if(returnTo == 2) {
+											imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										} else if(returnTo == 3) {
+											imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										}else if (returnTo == 4) {
+											imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										}else if (returnTo ==5) {
+											imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										}else if (returnTo == 6) {
+											imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										} else if(returnTo == 7) {
+											imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										} else if(returnTo == 8) {
+											imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										} else if(returnTo == 9) {
+											imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										} else if(returnTo == 10) {
+											imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										}else if(returnTo == 11) {
+											imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+										}
 									}
 								}
 							}
 						} else {
 							if(num1 == 12) {
-								stackOne.addCard(temp);
+								myStack.addCard(temp);
 								temp = null;
-								tempHolder.setCompoundDrawables(null,null,null,draw1);
+								tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null,draw1);
 								checkClick = false;
+								
+								if(returnTo == 0) {
+									imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 1) {
+									imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 2) {
+									imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 3) {
+									imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo == 4) {
+									imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo ==5) {
+									imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo == 6) {
+									imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 7) {
+									imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 8) {
+									imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 9) {
+									imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 10) {
+									imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if(returnTo == 11) {
+									imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}
 							}
 						}
 					}
 				}
 			}
 			
-		});
-		imageStackTwo.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//stackTwo
-				if(checkClick == false) {
-					temp = stackTwo.removeTopCard();
-					if(temp != null) {
-						tempHolder.setCompoundDrawables(null, null, null, temp.determineDrawable());
-						returnTo = 1;
-						checkClick = true;
-					}
-				} else {
-					if(returnTo == 1) {
-						stackTwo.addCard(temp);
-						temp = null;
-						tempHolder.setCompoundDrawables(null,null,null,draw1);
-						checkClick = false;
-					} else {
-						Card temp2 = stackTwo.getTopCard();
-						int suit1 = temp.getSuit();
-						int num1 = temp.getNumber();
-						if(temp2 != null) {
-							int suit2 = temp2.getSuit();
-							int num2 = temp2.getNumber();
-							if(suit2 == 0 || suit2 == 1) {
-								if(suit1 == 2 || suit1 ==3) {
-									if(num2 == num1 + 1) {
-										stackTwo.addCard(temp);
-										temp = null;
-										tempHolder.setCompoundDrawables(null,null,null,draw1);
-										checkClick = false;
-									}
-								}
-							} else {
-								if(suit1 == 0 || suit1 == 1) {
-									if(num2 == num1 + 1) {
-										stackTwo.addCard(temp);
-										temp = null;
-										tempHolder.setCompoundDrawables(null,null,null,draw1);
-										checkClick = false;
-									}
-								}
-							}
-						} else {
-							if(num1 == 12) {
-								stackTwo.addCard(temp);
-								temp = null;
-								tempHolder.setCompoundDrawables(null,null,null,draw1);
-								checkClick = false;
-							}
-						}
-					}
-				}
-			}
-		});
-		imageStackThree.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//stackThree
-				if(checkClick == false) {
-					temp = stackThree.removeTopCard();
-					if(temp != null) {
-						tempHolder.setCompoundDrawables(null, null, null, temp.determineDrawable());
-						returnTo = 2;
-						checkClick = true;
-					}
-				} else {
-					if(returnTo == 2) {
-						stackThree.addCard(temp);
-						temp = null;
-						tempHolder.setCompoundDrawables(null,null,null,draw1);
-						checkClick = false;
-					} else {
-						Card temp2 = stackThree.getTopCard();
-						int suit1 = temp.getSuit();
-						int num1 = temp.getNumber();
-						if(temp2 != null) {
-							int suit2 = temp2.getSuit();
-							int num2 = temp2.getNumber();
-							if(suit2 == 0 || suit2 == 1) {
-								if(suit1 == 2 || suit1 ==3) {
-									if(num2 == num1 + 1) {
-										stackThree.addCard(temp);
-										temp = null;
-										tempHolder.setCompoundDrawables(null,null,null,draw1);
-										checkClick = false;
-									}
-								}
-							} else {
-								if(suit1 == 0 || suit1 == 1) {
-									if(num2 == num1 + 1) {
-										stackThree.addCard(temp);
-										temp = null;
-										tempHolder.setCompoundDrawables(null,null,null,draw1);
-										checkClick = false;
-									}
-								}
-							}
-						} else {
-							if(num1 == 12) {
-								stackThree.addCard(temp);
-								temp = null;
-								tempHolder.setCompoundDrawables(null,null,null,draw1);
-								checkClick = false;
-							}
-						}
-					}
-				}
-			}
-		});
-		imageStackFour.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//stackFour
-				if(checkClick == false) {
-					temp = stackFour.removeTopCard();
-					if(temp != null) {
-						tempHolder.setCompoundDrawables(null, null, null, temp.determineDrawable());
-						returnTo = 3;
-						checkClick = true;
-					}
-				} else {
-					if(returnTo == 3) {
-						stackFour.addCard(temp);
-						temp = null;
-						tempHolder.setCompoundDrawables(null,null,null, draw1);
-						checkClick = false;
-					} else {
-						Card temp2 = stackFour.getTopCard();
-						int suit1 = temp.getSuit();
-						int num1 = temp.getNumber();
-						if(temp2 != null) {
-							int suit2 = temp2.getSuit();
-							int num2 = temp2.getNumber();
-							if(suit2 == 0 || suit2 == 1) {
-								if(suit1 == 2 || suit1 ==3) {
-									if(num2 == num1 + 1) {
-										stackFour.addCard(temp);
-										temp = null;
-										tempHolder.setCompoundDrawables(null,null,null,draw1);
-										checkClick = false;
-									}
-								}
-							} else {
-								if(suit1 == 0 || suit1 == 1) {
-									if(num2 == num1 + 1) {
-										stackFour.addCard(temp);
-										temp = null;
-										tempHolder.setCompoundDrawables(null,null,null,draw1);
-										checkClick = false;
-									}
-								}
-							}
-						} else {
-							if(num1 == 12) {
-								stackFour.addCard(temp);
-								temp = null;
-								tempHolder.setCompoundDrawables(null,null,null,draw1);
-								checkClick = false;
-							}
-						}
-					}
-				}
-			}
-		});
-		imageStackFive.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//stackFive
-				if(checkClick == false) {
-					temp = stackFive.removeTopCard();
-					if(temp != null) {
-						tempHolder.setCompoundDrawables(null, null, null, temp.determineDrawable());
-						returnTo = 4;
-						checkClick = true;
-					}
-				} else {
-					if(returnTo == 4) {
-						stackFive.addCard(temp);
-						temp = null;
-						tempHolder.setCompoundDrawables(null,null,null, draw1);
-						checkClick = false;
-					} else {
-						Card temp2 = stackFive.getTopCard();
-						int suit1 = temp.getSuit();
-						int num1 = temp.getNumber();
-						if(temp2 != null) {
-							int suit2 = temp2.getSuit();
-							int num2 = temp2.getNumber();
-							if(suit2 == 0 || suit2 == 1) {
-								if(suit1 == 2 || suit1 ==3) {
-									if(num2 == num1 + 1) {
-										stackFive.addCard(temp);
-										temp = null;
-										tempHolder.setCompoundDrawables(null,null,null,draw1);
-										checkClick = false;
-									}
-								}
-							} else {
-								if(suit1 == 0 || suit1 == 1) {
-									if(num2 == num1 + 1) {
-										stackFive.addCard(temp);
-										temp = null;
-										tempHolder.setCompoundDrawables(null,null,null,draw1);
-										checkClick = false;
-									}
-								}
-							}
-						} else {
-							if(num1 == 12) {
-								stackFive.addCard(temp);
-								temp = null;
-								tempHolder.setCompoundDrawables(null,null,null,draw1);
-								checkClick = false;
-							}
-						}
-					}
-				}
-			}
-		});
-		imageStackSix.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//stackSix
-				if(checkClick == false) {
-					temp = stackSix.removeTopCard();
-					if(temp != null) {
-						tempHolder.setCompoundDrawables(null, null, null, temp.determineDrawable());
-						returnTo = 5;
-						checkClick = true;
-					}
-				} else {
-					if(returnTo == 5) {
-						stackSix.addCard(temp);
-						temp = null;
-						tempHolder.setCompoundDrawables(null, null, null, draw1);
-						checkClick = false;
-					} else {
-						Card temp2 = stackSix.getTopCard();
-						int suit1 = temp.getSuit();
-						int num1 = temp.getNumber();
-						if(temp2 != null) {
-							int suit2 = temp2.getSuit();
-							int num2 = temp2.getNumber();
-							if(suit2 == 0 || suit2 == 1) {
-								if(suit1 == 2 || suit1 ==3) {
-									if(num2 == num1 + 1) {
-										stackSix.addCard(temp);
-										temp = null;
-										tempHolder.setCompoundDrawables(null,null,null,draw1);
-										checkClick = false;
-									}
-								}
-							} else {
-								if(suit1 == 0 || suit1 == 1) {
-									if(num2 == num1 + 1) {
-										stackSix.addCard(temp);
-										temp = null;
-										tempHolder.setCompoundDrawables(null,null,null,draw1);
-										checkClick = false;
-									}
-								}
-							}
-						} else {
-							if(num1 == 12) {
-								stackSix.addCard(temp);
-								temp = null;
-								tempHolder.setCompoundDrawables(null,null,null,draw1);
-								checkClick = false;
-							}
-						}
-					}
-				}
-			}
-		});
-		imageStackSeven.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//stackSeven
-				if(checkClick == false) {
-					temp = stackSeven.removeTopCard();
-					if(temp != null) {
-						tempHolder.setCompoundDrawables(null, null, null, temp.determineDrawable());
-						returnTo = 6;
-						checkClick = true;
-					}
-				} else {
-					if(returnTo == 6) {
-						stackSeven.addCard(temp);
-						temp = null;
-						tempHolder.setCompoundDrawables(null, null, null, draw1);
-						checkClick = false;
-					} else {
-						Card temp2 = stackSeven.getTopCard();
-						int suit1 = temp.getSuit();
-						int num1 = temp.getNumber();
-						if(temp2 != null) {
-							int suit2 = temp2.getSuit();
-							int num2 = temp2.getNumber();
-							if(suit2 == 0 || suit2 == 1) {
-								if(suit1 == 2 || suit1 ==3) {
-									if(num2 == num1 + 1) {
-										stackSeven.addCard(temp);
-										temp = null;
-										tempHolder.setCompoundDrawables(null,null,null,draw1);
-										checkClick = false;
-									}
-								}
-							} else {
-								if(suit1 == 0 || suit1 == 1) {
-									if(num2 == num1 + 1) {
-										stackSeven.addCard(temp);
-										temp = null;
-										tempHolder.setCompoundDrawables(null,null,null,draw1);
-										checkClick = false;
-									}
-								}
-							}
-						} else {
-							if(num1 == 12) {
-								stackSeven.addCard(temp);
-								temp = null;
-								tempHolder.setCompoundDrawables(null,null,null,draw1);
-								checkClick = false;
-							}
-						}
-					}
-				}
-			}
-		});
+		};
+		
+		//Regular Spaces
+		imageStackOne.setOnClickListener(NormalOnClickListener);
+		imageStackTwo.setOnClickListener(NormalOnClickListener);
+		imageStackThree.setOnClickListener(NormalOnClickListener);
+		imageStackFour.setOnClickListener(NormalOnClickListener);
+		imageStackFive.setOnClickListener(NormalOnClickListener);
+		imageStackSix.setOnClickListener(NormalOnClickListener);
+		imageStackSeven.setOnClickListener(NormalOnClickListener);
 		
 		//Deck
 		imageDrawDeckTwo.setOnClickListener(new OnClickListener() {
@@ -519,15 +384,17 @@ public class MainActivity extends Activity {
 				if(checkClick == false) {
 					temp = clickDeck.removeTopCard();
 					if(temp != null) {
-						tempHolder.setCompoundDrawables(null, null, null, temp.determineDrawable());
+						tempHolder.setCompoundDrawablesWithIntrinsicBounds(null, null, null, temp.determineDrawable());
 						returnTo = 7;
 						checkClick = true;
+						imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.yellow));
 					}
 				} else {
 					if(returnTo == 7) {
 						clickDeck.returnCardToDeck(temp);
 						temp = null;
-						tempHolder.setCompoundDrawables(null, null, null, draw1);
+						tempHolder.setCompoundDrawablesWithIntrinsicBounds(null, null, null, draw1);
+						imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
 						checkClick = false;
 					}
 				}
@@ -549,24 +416,40 @@ public class MainActivity extends Activity {
 		
 		
 		//Suit spaces
-		imageSpade.setOnClickListener(new OnClickListener() {
+		
+		OnClickListener SuitClickListener = new OnClickListener() {
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View v) {
+				Stack myStack = stackSpades;
+				ImageView myImage = (ImageView)v;
+				if(myImage == imageSpade) {
+					myStack = stackSpades;
+				} else if(myImage == imageClub) {
+					myStack = stackClubs;
+				} else if(myImage == imageDiamond) {
+					myStack = stackDiamonds;
+				} else if(myImage == imageHeart){
+					myStack = stackHearts;
+				}
+				
 				if(checkClick == false) {
-					temp = stackSpades.removeTopCard();
+					temp = myStack.getTopCard();
 					if(temp != null) {
-						tempHolder.setCompoundDrawables(null, null, null, temp.determineDrawable());
+						temp = myStack.removeTopCard();
+						tempHolder.setCompoundDrawablesWithIntrinsicBounds(null, null, null, temp.determineDrawable());
 						returnTo = 8;
 						checkClick = true;
+						myImage.setBackgroundColor(myContext.getResources().getColor(R.color.yellow));
 					}
 				} else {
 					if(returnTo == 8) {
-						stackSpades.addCard(temp);
-						tempHolder.setCompoundDrawables(null, null, null, draw1);
+						myStack.addCard(temp);
+						tempHolder.setCompoundDrawablesWithIntrinsicBounds(null, null, null, draw1);
 						checkClick = false;
 						temp = null;
+						myImage.setBackgroundColor(myContext.getResources().getColor(R.color.white));
 					} else {
-						Card temp2 = stackSpades.getTopCard();
+						Card temp2 = myStack.getTopCard();
 						int suit1 = temp.getSuit();
 						int num1 = temp.getNumber();
 						if(temp2 != null)
@@ -574,292 +457,508 @@ public class MainActivity extends Activity {
 							int suit2 = temp2.getSuit();
 							int num2 = temp2.getNumber();
 							if(suit1 == suit2 && num1 == num2 +1) {
-								stackSpades.addCard(temp);
-								temp = null;
+								myStack.addCard(temp);
 								checkClick = false;
-								tempHolder.setCompoundDrawables(null,null,null,draw1);
+								tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null,draw1);
+								if(temp.getSwapped() == false) {
+									temp.setSwapped(true);
+									if(num2 == 12) {
+										score = score + 100;
+									} else {
+										score = score + 10;
+									}
+									scor.setText("Score: "+score);
+								}
+								temp = null;
+								
+								if(returnTo == 0) {
+									imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 1) {
+									imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 2) {
+									imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 3) {
+									imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo == 4) {
+									imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo ==5) {
+									imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo == 6) {
+									imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 7) {
+									imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 8) {
+									imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 9) {
+									imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 10) {
+									imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if(returnTo == 11) {
+									imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}
+								
+							}
+							if(temp == null && stackOne.getTopCard() == null && stackTwo.getTopCard() == null && stackThree.getTopCard() == null
+									&& stackFour.getTopCard()==null && stackFive.getTopCard() == null && stackSix.getTopCard() == null 
+									&& stackSeven.getTopCard() == null && clickDeck.getCurrentSizeOne() == 0 && clickDeck.getCurrentSizeTwo() == 0) {
+								endGame(score);
 							}
 						} else {
-							if(suit1 == 0 && num1 == 0) {
-								stackSpades.addCard(temp);
-								temp = null;
+							if(myStack == stackSpades && suit1 == 0 && num1 == 0) {
+								myStack.addCard(temp);
 								checkClick = false;
-								tempHolder.setCompoundDrawables(null,null,null,draw1);
+								tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null,draw1);
+								if(temp.getSwapped() == false) {
+									temp.setSwapped(true);
+									score = score + 10;
+									scor.setText("Score: "+score);
+								}
+								if(returnTo == 0) {
+									imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 1) {
+									imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 2) {
+									imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 3) {
+									imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo == 4) {
+									imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo ==5) {
+									imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo == 6) {
+									imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 7) {
+									imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 8) {
+									imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 9) {
+									imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 10) {
+									imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if(returnTo == 11) {
+									imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}
+								temp = null;
+							} else if(myStack == stackClubs && suit1 == 1 && num1 == 0) {
+								myStack.addCard(temp);
+								checkClick = false;
+								tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null,draw1);
+								if(temp.getSwapped() == false) {
+									temp.setSwapped(true);
+									score = score + 10;
+									scor.setText("Score: "+score);
+								}
+								if(returnTo == 0) {
+									imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 1) {
+									imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 2) {
+									imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 3) {
+									imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo == 4) {
+									imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo ==5) {
+									imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo == 6) {
+									imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 7) {
+									imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 8) {
+									imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 9) {
+									imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 10) {
+									imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if(returnTo == 11) {
+									imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}
+							} else if(myStack == stackDiamonds && suit1 == 2 && num1 == 0) {
+								myStack.addCard(temp);
+								checkClick = false;
+								tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null,draw1);
+								if(temp.getSwapped() == false) {
+									temp.setSwapped(true);
+									score = score + 10;
+									scor.setText("Score: "+score);
+								}
+								if(returnTo == 0) {
+									imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 1) {
+									imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 2) {
+									imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 3) {
+									imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo == 4) {
+									imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo ==5) {
+									imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo == 6) {
+									imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 7) {
+									imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 8) {
+									imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 9) {
+									imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 10) {
+									imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if(returnTo == 11) {
+									imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}
+							} else if(myStack == stackHearts && suit1 == 3 && num1 == 0) {
+								myStack.addCard(temp);
+								checkClick = false;
+								tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null,draw1);
+								if(temp.getSwapped() == false) {
+									temp.setSwapped(true);
+									score = score + 10;
+									scor.setText("Score: "+score);
+								}
+								if(returnTo == 0) {
+									imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 1) {
+									imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 2) {
+									imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 3) {
+									imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo == 4) {
+									imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo ==5) {
+									imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if (returnTo == 6) {
+									imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 7) {
+									imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 8) {
+									imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 9) {
+									imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								} else if(returnTo == 10) {
+									imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}else if(returnTo == 11) {
+									imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+								}
 							}
 						}
 					}
 				}
 			}
-		});
+		};
 		
-		imageClub.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				if(checkClick == false) {
-					temp = stackClubs.removeTopCard();
-					if(temp != null) {
-						tempHolder.setCompoundDrawables(null, null, null, temp.determineDrawable());
-						returnTo = 9;
-						checkClick = true;
-					}
-				} else {
-					if(returnTo == 9) {
-						stackClubs.addCard(temp);
-						tempHolder.setCompoundDrawables(null, null, null, draw1);
-						checkClick = false;
-						temp = null;
-					} else {
-						Card temp2 = stackClubs.getTopCard();
-						int suit1 = temp.getSuit();
-						int num1 = temp.getNumber();
-						if(temp2 != null)
-						{
-							int suit2 = temp2.getSuit();
-							int num2 = temp2.getNumber();
-							if(suit1 == suit2 && num1 == num2 +1) {
-								stackClubs.addCard(temp);
-								temp = null;
-								checkClick = false;
-								tempHolder.setCompoundDrawables(null,null,null,draw1);
-							}
-						} else {
-							if(suit1 == 1 && num1 == 0) {
-								stackClubs.addCard(temp);
-								temp = null;
-								checkClick = false;
-								tempHolder.setCompoundDrawables(null,null,null,draw1);
-							}
-						}
-					}
-				}
-			}
-		});
+		imageSpade.setOnClickListener(SuitClickListener);
+		imageClub.setOnClickListener(SuitClickListener);
+		imageDiamond.setOnClickListener(SuitClickListener);
+		imageHeart.setOnClickListener(SuitClickListener);
 		
-		imageDiamond.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				if(checkClick == false) {
-					temp = stackDiamonds.removeTopCard();
-					if(temp != null) {
-						tempHolder.setCompoundDrawables(null, null, null, temp.determineDrawable());
-						returnTo = 10;
-						checkClick = true;
-					}
-				} else {
-					if(returnTo == 10) {
-						stackDiamonds.addCard(temp);
-						tempHolder.setCompoundDrawables(null, null, null, draw1);
-						checkClick = false;
-						temp = null;
-					} else {
-						Card temp2 = stackDiamonds.getTopCard();
-						int suit1 = temp.getSuit();
-						int num1 = temp.getNumber();
-						if(temp2 != null)
-						{
-							int suit2 = temp2.getSuit();
-							int num2 = temp2.getNumber();
-							if(suit1 == suit2 && num1 == num2 +1) {
-								stackDiamonds.addCard(temp);
-								temp = null;
-								checkClick = false;
-								tempHolder.setCompoundDrawables(null,null,null,draw1);
-							}
-						} else {
-							if(suit1 == 2 && num1 == 0) {
-								stackDiamonds.addCard(temp);
-								temp = null;
-								checkClick = false;
-								tempHolder.setCompoundDrawables(null,null,null,draw1);
-							}
-						}
-					}
-				}
-			}
-		});
-		imageHeart.setOnClickListener(new OnClickListener() {
+		timerText = (TextView)findViewById(R.id.timerShow);
+		Timer T=new Timer();
+		T.scheduleAtFixedRate(new TimerTask() {         
+		        @Override
+		        public void run() {
+		            runOnUiThread(new Runnable()
+		            {
+		                @Override
+		                public void run()
+		                {
+		                	if(isPaused == false) {
+		                		timeSeconds++;
+			                    timerText.setText("Time: " + timeSeconds +"s");
+			                    int a = timeSeconds % 10;
+			                    if(a==0 && score > 0) {
+			                    	score--;
+			                    	scor.setText("Score: " + score);
+			                    }
+		                	}
+		                }
+		            });
+		        }
+		    }, 1000, 1000);
+		
+		//highscore button
+		highScores = (Button)findViewById(R.id.highScoreButton);
+		highScores.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(checkClick == false) {
-					temp = stackHearts.removeTopCard();
-					if(temp != null) {
-						tempHolder.setCompoundDrawables(null, null, null, temp.determineDrawable());
-						returnTo = 11;
-						checkClick = true;
-					}
-				} else {
-					if(returnTo == 11) {
-						stackHearts.addCard(temp);
-						tempHolder.setCompoundDrawables(null, null, null, draw1);
-						checkClick = false;
-						temp = null;
-					} else {
-						Card temp2 = stackHearts.getTopCard();
-						int suit1 = temp.getSuit();
-						int num1 = temp.getNumber();
-						if(temp2 != null)
-						{
-							int suit2 = temp2.getSuit();
-							int num2 = temp2.getNumber();
-							if(suit1 == suit2 && num1 == num2 +1) {
-								stackHearts.addCard(temp);
-								temp = null;
-								checkClick = false;
-								tempHolder.setCompoundDrawables(null,null,null,draw1);
-							}
-						} else {
-							if(suit1 == 3 && num1 == 0) {
-								stackHearts.addCard(temp);
-								temp = null;
-								checkClick = false;
-								tempHolder.setCompoundDrawables(null,null,null,draw1);
-							}
-						}
-					}
-				}
+				isPaused = true;
+				Intent i = new Intent(getApplicationContext(), highscores_view.class);
+				i.putExtra("highscore1", highScore1);
+				i.putExtra("highscore2", highScore2);
+				i.putExtra("highscore3", highScore3);
+				i.putExtra("highscore4", highScore4);
+				i.putExtra("highscore5", highScore5);
+				i.putExtra("highscorename1", highScoreName1);
+				i.putExtra("highscorename2", highScoreName2);
+				i.putExtra("highscorename3", highScoreName3);
+				i.putExtra("highscorename4", highScoreName4);
+				i.putExtra("highscorename5", highScoreName5);
+				i.putExtra("boolAdd", false);
+				i.putExtra("boolStay", true);
+				startActivityForResult(i, HIGHSCORES);
+			}
+			
+		});
+		
+		newGameButton = (Button)findViewById(R.id.new_game);
+		newGameButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				newGame();
 			}
 		});
 		
+		/*
+		//Drag Clicking for the imageViews
+		//I used this in order to create my click and drag capabilities: http://mobile.tutsplus.com/tutorials/android/android-sdk-implementing-drag-and-drop-functionality/
+		OnTouchListener cardDraggerTouch = new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent m) {
+				// TODO Auto-generated method stub
+				if (m.getAction() == MotionEvent.ACTION_DOWN) {
+					int b = ((Integer)v.getTag());
+					ClipData data = ClipData.newPlainText("", "" + b);
+					DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+					v.startDrag(data, shadowBuilder, v, 0);
+					return true;
+				}
+				return false;
+			}
+		};
+		
+		imageStackOne.setOnTouchListener(cardDraggerTouch);
+		imageStackTwo.setOnTouchListener(cardDraggerTouch);
+		imageStackThree.setOnTouchListener(cardDraggerTouch);
+		imageStackFour.setOnTouchListener(cardDraggerTouch);
+		imageStackFive.setOnTouchListener(cardDraggerTouch);
+		imageStackSix.setOnTouchListener(cardDraggerTouch);
+		imageStackSeven.setOnTouchListener(cardDraggerTouch);
+		imageDrawDeckTwo.setOnTouchListener(cardDraggerTouch);
+		imageHeart.setOnTouchListener(cardDraggerTouch);
+		imageDiamond.setOnTouchListener(cardDraggerTouch);
+		imageClub.setOnTouchListener(cardDraggerTouch);
+		imageSpade.setOnTouchListener(cardDraggerTouch);
+		
+		
+		OnDragListener cardDragListener = new OnDragListener() {
+
+			@Override
+			public boolean onDrag(View v, DragEvent event) {
+				DrawDeck clicky = null;
+				Stack myStack = null;
+					// TODO Auto-generated method stub
+					switch (event.getAction()) {
+				    case DragEvent.ACTION_DRAG_STARTED:
+				        //no action necessary
+				    	return true;
+					case DragEvent.ACTION_DRAG_ENTERED:
+				        //no action necessary
+						Log.d("Drag", "I have entered; v = " + v);
+				        break;
+				    case DragEvent.ACTION_DRAG_EXITED:
+				        //no action necessary
+				        break;
+				    case DragEvent.ACTION_DROP:
+				    	View view = (View) event.getLocalState();
+				    	view.setVisibility(View.INVISIBLE);
+				    	ImageView dropTarget = (ImageView) view;
+				    	ImageView dropped = (ImageView) v;
+				    	returnTo = isWhatStack(dropped);
+				    	int returnTo2 = isWhatStack(dropTarget);
+				    	if(returnTo == 0) {
+				    		myStack = stackOne;
+				    	} else if(returnTo == 1) {
+				    		myStack = stackTwo;
+				    	} else if(returnTo == 2) {
+				    		myStack = stackThree;
+				    	} else if(returnTo == 3) {
+				    		myStack = stackFour;
+				    	} else if(returnTo == 4) {
+				    		myStack = stackFive;
+				    	} else if(returnTo == 5) {
+				    		myStack = stackSix;
+				    	} else if(returnTo == 6) {
+				    		myStack = stackSeven;
+				    	} else if(returnTo == 7) {
+				    		clicky = clickDeck;
+				    	} else if(returnTo == 8) {
+				    		myStack = stackSpades;
+				    	} else if(returnTo == 9) {
+				    		myStack = stackClubs;
+				    	} else if(returnTo == 10) {
+				    		myStack = stackDiamonds;
+				    	} else if(returnTo == 11) {
+				    		myStack = stackHearts;
+				    	}
+				    	Stack myStackTwo = null;
+				    	if(returnTo2 == 0) {
+				    		myStackTwo = stackOne;
+				    	} else if(returnTo2 == 1) {
+				    		myStackTwo = stackTwo;
+				    	} else if(returnTo2 == 2) {
+				    		myStackTwo = stackThree;
+				    	} else if(returnTo2 == 3) {
+				    		myStackTwo = stackFour;
+				    	} else if(returnTo2 == 4) {
+				    		myStackTwo = stackFive;
+				    	} else if(returnTo2 == 5) {
+				    		myStackTwo = stackSix;
+				    	} else if(returnTo2 == 6) {
+				    		myStackTwo = stackSeven;
+				    	} else if(returnTo2 == 8) {
+				    		myStackTwo = stackSpades;
+				    	} else if(returnTo2 == 9) {
+				    		myStackTwo = stackClubs;
+				    	} else if(returnTo2 == 10) {
+				    		myStackTwo = stackDiamonds;
+				    	} else if(returnTo2 == 11) {
+				    		myStackTwo = stackHearts;
+				    	}
+				    	if(myStack != null && myStackTwo != null) {
+				    		
+				    		Card card1 = null;
+				    		if(returnTo == 7) {
+				    			card1 = clicky.getTopCard();
+				    		} else {
+				    			card1 = myStack.getTopCard();
+				    		}
+				    		if(returnTo2 != 7 && card1 != null) {
+				    			Card card2 = myStackTwo.getTopCard();
+				    		
+				    			if(returnTo < 8 && returnTo2 < 7) {
+				    				if(card2 == null && card1.getNumber() == 12) {
+				    					myStackTwo.addCard(card1);
+				    					myStack.removeTopCard();
+				    				}
+				    				else if((card1.getSuit() == 0|| card1.getSuit() == 1) && (card2.getSuit() == 2 || card2.getSuit() == 3)){
+				    					if(card1.getNumber() == card2.getNumber() - 1) {
+				    						myStack.removeTopCard();
+				    						myStackTwo.addCard(card1);
+				    					} else {
+				    					}
+				    				} else {
+				    				}
+				    			} else if(returnTo < 7 && returnTo2 >= 8) {
+				    				if(card2 == null) {
+				    					if(card1.getNumber() == 0 && myStackTwo.getStackSuit() == card1.getSuit()) {
+				    						myStackTwo.addCard(card1);
+				    						myStack.removeTopCard();
+				    					}
+				    				} else if(card2.getSuit() == card1.getSuit()) {
+				    					if(card2.getNumber() + 1 == card1.getNumber()) {
+				    						myStack.removeTopCard();
+				    						myStackTwo.addCard(card1);
+				    					} else {
+				    					}
+				    				} else {
+				    				}
+				    			} else if(returnTo >= 8 && returnTo2 >= 8) {
+				    				return true;
+				    			} else if(returnTo == 7 && returnTo2 >= 8) {
+				    				if(card2 == null) {
+				    					if(card1.getNumber() == 0 && myStackTwo.getStackSuit() == card1.getSuit()) {
+				    						myStackTwo.addCard(card1);
+				    						clicky.removeTopCard();
+				    					}
+				    				} else if(card2.getSuit() == card1.getSuit()) {
+				    					if(card2.getNumber() + 1 == card1.getNumber()) {
+				    						clicky.removeTopCard();
+				    						myStackTwo.addCard(card1);
+				    					} else {
+				    					}
+				    				} else {
+				    				}
+				    			} else if(returnTo == 7 && returnTo2 < 7) {
+				    				if(card2 == null && card1.getNumber() == 12) {
+				    					myStackTwo.addCard(card1);
+				    					clicky.removeTopCard();
+				    				}
+				    				else if((card1.getSuit() == 0|| card1.getSuit() == 1) && (card2.getSuit() == 2 || card2.getSuit() == 3)){
+				    					if(card1.getNumber() == card2.getNumber() - 1) {
+				    						clicky.removeTopCard();
+				    						myStackTwo.addCard(card1);
+				    					} else {
+				    					}
+				    				} else {
+				    				}
+				    			}
+				    		} else {
+				    		}
+				    	}
+				    	return true;
+				        //handle the dragged view being dropped over a drop view
+				    case DragEvent.ACTION_DRAG_ENDED:
+				        //no action necessary
+				        break;
+				    default:
+				        break;
+					}
+				return false;
+			}
+			
+			public int isWhatStack(ImageView k) {
+				if(k == imageStackOne) {
+					return 0;
+				} else if(k == imageStackTwo) {
+					return 1;
+				} else if(k == imageStackThree) {
+					return 2;
+				} else if(k == imageStackFour) {
+					return 3;
+				} else if(k == imageStackFive) {
+					return 4;
+				} else if(k == imageStackSix) {
+					return 5;
+				} else if(k == imageStackSeven) {
+					return 6;
+				} else if(k == imageDrawDeckTwo) {
+					return 7;
+				} else if(k == imageSpade) {
+					return 8;
+				} else if(k == imageClub) {
+					return 9;
+				} else if(k == imageDiamond) {
+					return 10;
+				} else {//imageHeart
+					return 11;
+				}
+			}
+		};
+		imageStackOne.setOnDragListener(cardDragListener);
+		imageStackTwo.setOnDragListener(cardDragListener);
+		imageStackThree.setOnDragListener(cardDragListener);
+		imageStackFour.setOnDragListener(cardDragListener);
+		imageStackFive.setOnDragListener(cardDragListener);
+		imageStackSix.setOnDragListener(cardDragListener);
+		imageStackSeven.setOnDragListener(cardDragListener);
+		imageDrawDeckTwo.setOnDragListener(cardDragListener);
+		imageHeart.setOnDragListener(cardDragListener);
+		imageDiamond.setOnDragListener(cardDragListener);
+		imageClub.setOnDragListener(cardDragListener);
+		imageSpade.setOnDragListener(cardDragListener);
+		*/
 	}
 	
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
-		int[] val1 = savedInstanceState.getIntArray(value1);
-		int[] val2 = savedInstanceState.getIntArray(value2);
-		int[] val3 = savedInstanceState.getIntArray(value3);
-		int[] val4 = savedInstanceState.getIntArray(value4);
-		int[] val5 = savedInstanceState.getIntArray(value5);
-		int[] val6 = savedInstanceState.getIntArray(value6);
-		int[] val7 = savedInstanceState.getIntArray(value7);
-		int[] val8 = savedInstanceState.getIntArray(value8);
-		int[] val9 = savedInstanceState.getIntArray(value9);
-		int[] val10 = savedInstanceState.getIntArray(value10);
-		int[] val11 = savedInstanceState.getIntArray(value11);
-		int[] val12 = savedInstanceState.getIntArray(value12);
-		int[] val13 = savedInstanceState.getIntArray(value13);
-		int val14 = savedInstanceState.getInt(value14);
+		highScore1 = savedInstanceState.getInt(value1,0);
+		highScore2 = savedInstanceState.getInt(value2, 0);
+		highScore3 = savedInstanceState.getInt(value3, 0);
+		highScore4 = savedInstanceState.getInt(value4, 0);
+		highScore5 = savedInstanceState.getInt(value5, 0);
+		highScoreName1 = savedInstanceState.getString(value6);
+		highScoreName2 = savedInstanceState.getString(value7);
+		highScoreName3 = savedInstanceState.getString(value8);
+		highScoreName4 = savedInstanceState.getString(value9);
+		highScoreName5 = savedInstanceState.getString(value10);
 		
-		ArrayList<Card> restoreDeck = new ArrayList<Card>();
 		
-		if(val1.length > 0) {
-			ArrayList<Card> stack = new ArrayList<Card>();
-			for(int i = 0; i < val1.length; i++) {
-				Card c = determineCard(val1[i]);
-				stack.add(c);
-				restoreDeck.add(c);
-			}
-		}
-		if(val2.length > 0) {
-			ArrayList<Card> stack = new ArrayList<Card>();
-			for(int i = 0; i < val2.length; i++) {
-				Card c = determineCard(val2[i]);
-				stack.add(c);
-				restoreDeck.add(c);
-			}
-		}
-		if(val3.length > 0) {
-			ArrayList<Card> stack = new ArrayList<Card>();
-			for(int i = 0; i < val3.length; i++) {
-				Card c = determineCard(val3[i]);
-				stack.add(c);
-				restoreDeck.add(c);
-			}
-		}
-		if(val4.length > 0) {
-			ArrayList<Card> stack = new ArrayList<Card>();
-			for(int i = 0; i < val4.length; i++) {
-				Card c = determineCard(val4[i]);
-				stack.add(c);
-				restoreDeck.add(c);
-			}
-		}
-		if(val5.length >0) {
-			ArrayList<Card> stack = new ArrayList<Card>();
-			for(int i = 0; i < val5.length; i++) {
-				Card c = determineCard(val5[i]);
-				stack.add(c);
-				restoreDeck.add(c);
-			}
-		}
-		if(val6.length >0) {
-			ArrayList<Card> stack = new ArrayList<Card>();
-			for(int i = 0; i < val6.length; i++) {
-				Card c = determineCard(val6[i]);
-				stack.add(c);
-				restoreDeck.add(c);
-			}
-		}
-		if(val7.length >0) {
-			ArrayList<Card> stack = new ArrayList<Card>();
-			for(int i = 0; i < val7.length; i++) {
-				Card c = determineCard(val7[i]);
-				stack.add(c);
-				restoreDeck.add(c);
-			}
-		}
-		if(val8.length > 0) {
-			ArrayList<Card> stack = new ArrayList<Card>();
-			for(int i = 0; i < val8.length; i++) {
-				Card c = determineCard(val8[i]);
-				stack.add(c);
-				restoreDeck.add(c);
-			}
-		}
-		if(val9.length > 0) {
-			ArrayList<Card> stack = new ArrayList<Card>();
-			for(int i = 0; i < val9.length; i++) {
-				Card c = determineCard(val9[i]);
-				stack.add(c);
-				restoreDeck.add(c);
-			}
-		}
-		if(val10.length > 0) {
-			ArrayList<Card> stack = new ArrayList<Card>();
-			for(int i = 0; i < val10.length; i++) {
-				Card c = determineCard(val10[i]);
-				stack.add(c);
-				restoreDeck.add(c);
-			}
-		}
-		if(val11.length > 0) {
-			ArrayList<Card> stack = new ArrayList<Card>();
-			for(int i = 0; i < val11.length; i++) {
-				Card c = determineCard(val11[i]);
-				stack.add(c);
-				restoreDeck.add(c);
-			}
-		}
-		if(val12.length >0) {
-			ArrayList<Card> stack = new ArrayList<Card>();
-			for(int i = 0; i < val12.length; i++) {
-				Card c = determineCard(val12[i]);
-				stack.add(c);
-				restoreDeck.add(c);
-			}
-		}
-		if(val13.length > 0) {
-			ArrayList<Card> stack = new ArrayList<Card>();
-			for(int i = 0; i < val13.length; i++) {
-				Card c = determineCard(val13[i]);
-				stack.add(c);
-				restoreDeck.add(c);
-			}
-		}
-		if(val14 != 52) {
-			temp = determineCard(val14);
-			checkClick = true;
-			tempHolder.setCompoundDrawables(null,null,null, temp.determineDrawable());
-			returnTo = savedInstanceState.getInt(value15);
-			restoreDeck.add(temp);
-		} else {
-			temp = null;
-			checkClick = false;
-			tempHolder.setCompoundDrawables(null, null, null, draw1);
-			returnTo = 0;
-		}
+		//val1 deckPopMe, val2 deckHolder, val3 HeartsStack, val4
 	}
 
 	
@@ -867,159 +966,18 @@ public class MainActivity extends Activity {
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		Bundle savedInstance = new Bundle();
-		ArrayList<Card> popMe = clickDeck.getPopMe();
-		int[] val1 = new int[popMe.size()];
-		for(int i = 0; i < popMe.size(); i++) {
-			Card cardMe = popMe.get(i);
-			int suit = cardMe.getSuit();
-			int num = cardMe.getNumber();
-			int b = (suit*13) + num;
-			val1[i] = b;
-		}
-		savedInstance.putIntArray(value1, val1);
-		
-		ArrayList<Card> holder = clickDeck.getHolder();
-		int[] val2 = new int[holder.size()];
-		for(int i = 0; i < holder.size(); i++) {
-			Card cardMe = holder.get(i);
-			int suit = cardMe.getSuit();
-			int num = cardMe.getNumber();
-			int b = (suit*13) + num;
-			val2[i] = b;
-		}
-		savedInstance.putIntArray(value2, val2);
-		
-		ArrayList<Card> hearts = stackHearts.getStack();
-		int[] val3 = new int[hearts.size()];
-		for(int i = 0; i < hearts.size(); i++) {
-			Card cardMe = hearts.get(i);
-			int suit = cardMe.getSuit();
-			int num = cardMe.getNumber();
-			int b = (suit* 13) + num;
-			val3[i] = b;
-		}
-		savedInstance.putIntArray(value3, val3);
-		
-		ArrayList<Card> diamonds = stackDiamonds.getStack();
-		int[] val4 = new int[diamonds.size()];
-		for(int i = 0; i < diamonds.size(); i++) {
-			Card cardMe = diamonds.get(i);
-			int suit = cardMe.getSuit();
-			int num = cardMe.getNumber();
-			int b = (suit*13) + num;
-			val4[i] =b;
-		}
-		savedInstance.putIntArray(value4, val4);
-		
-		ArrayList<Card> clubs = stackClubs.getStack();
-		int[] val5 = new int[clubs.size()];
-		for(int i = 0; i < clubs.size(); i++) {
-			Card card = clubs.get(i);
-			int suit = card.getSuit();
-			int num = card.getNumber();
-			int b = (suit*13) + num;
-			val5[i] = b;
-		}
-		savedInstance.putIntArray(value5, val5);
-		
-		ArrayList<Card> spades = stackClubs.getStack();
-		int[] val6 = new int[spades.size()];
-		for(int i = 0; i < spades.size(); i++) {
-			Card card = spades.get(i);
-			int suit = card.getSuit();
-			int num = card.getNumber();
-			int b = (suit*13) + num;
-			val6[i] = b;
-		}
-		savedInstance.putIntArray(value6, val6);
-		
-		ArrayList<Card> cardStackOne = stackOne.getStack();
-		int[] val7 = new int[cardStackOne.size()];
-		for(int i = 0; i < cardStackOne.size(); i++) {
-			Card card = cardStackOne.get(i);
-			int suit = card.getSuit();
-			int num = card.getNumber();
-			int b = (suit*13) + num;
-			val7[i] = b;
-		}
-		savedInstance.putIntArray(value7, val7);
-		
-		ArrayList<Card> cardStackTwo = stackTwo.getStack();
-		int[] val8 = new int[cardStackTwo.size()];
-		for(int i = 0; i < cardStackTwo.size(); i++) {
-			Card card = cardStackTwo.get(i);
-			int suit = card.getSuit();
-			int num = card.getNumber();
-			int b = (suit*13) + num;
-			val8[i] = b;
-		}
-		savedInstance.putIntArray(value8, val8);
-		
-		ArrayList<Card> cardStackThree = stackThree.getStack();
-		int[] val9 = new int[cardStackThree.size()];
-		for(int i = 0; i < cardStackThree.size(); i++) {
-			Card card = cardStackThree.get(i);
-			int suit = card.getSuit();
-			int num = card.getNumber();
-			int b = (suit*13) + num;
-			val9[i] = b;
-		}
-		savedInstance.putIntArray(value9, val9);
-		
-		ArrayList<Card> cardStackFour = stackFour.getStack();
-		int[] val10 = new int[cardStackFour.size()];
-		for(int i = 0; i < cardStackFour.size(); i++) {
-			Card card = cardStackFour.get(i);
-			int suit = card.getSuit();
-			int num = card.getNumber();
-			int b = (suit*13) + num;
-			val10[i] = b;
-		}
-		savedInstance.putIntArray(value10, val10);
-		
-		ArrayList<Card> cardStackFive = stackFive.getStack();
-		int[] val11 = new int[cardStackFive.size()];
-		for(int i = 0; i < cardStackFive.size(); i++) {
-			Card card = cardStackFive.get(i);
-			int suit = card.getSuit();
-			int num = card.getNumber();
-			int b = (suit*13) + num;
-			val11[i] = b;
-		}
-		savedInstance.putIntArray(value11, val11);
-		
-		ArrayList<Card> cardStackSix = stackSix.getStack();
-		int[] val12 = new int[cardStackSix.size()];
-		for(int i = 0; i < cardStackSix.size(); i++) {
-			Card card = cardStackSix.get(i);
-			int suit = card.getSuit();
-			int num = card.getNumber();
-			int b = (suit*13) + num;
-			val12[i] = b;
-		}
-		savedInstance.putIntArray(value12, val12);
-		
-		ArrayList<Card> cardStackSeven = stackSeven.getStack();
-		int[] val13 = new int[cardStackSeven.size()];
-		for(int i = 0; i < cardStackSeven.size(); i++) {
-			Card card = cardStackSeven.get(i);
-			int suit = card.getSuit();
-			int num = card.getNumber();
-			int b = (suit*13) + num;
-			val13[i] = b;
-		}
-		savedInstance.putIntArray(value13, val13);
-		
-		if(temp != null) {
-
-			savedInstance.putInt(value14, (temp.getSuit()*13)+temp.getNumber());
-			savedInstance.putInt(value15, returnTo);
-		} else {
-			savedInstance.putInt(value14, 52);
-		}
-		
-		
-		super.onSaveInstanceState(savedInstance);
+		savedInstance.putInt(value1, highScore1);
+		savedInstance.putInt(value2, highScore2);
+		savedInstance.putInt(value3, highScore3);
+		savedInstance.putInt(value4, highScore4);
+		savedInstance.putInt(value5, highScore5);
+		savedInstance.putString(value6, highScoreName1);
+		savedInstance.putString(value7, highScoreName2);
+		savedInstance.putString(value8, highScoreName3);
+		savedInstance.putString(value9, highScoreName4);
+		savedInstance.putString(value10, highScoreName5);
+		savedInstanceState = savedInstance;
+		super.onSaveInstanceState(savedInstanceState);
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -1028,113 +986,168 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
-	public Card determineCard(int b) {
-		switch(b) {
-		case 0:
-			return new Card(0,0, myContext);
-		case 1:
-			return new Card(0,1, myContext);
-		case 2:
-			return new Card(0,2,myContext);
-		case 3:
-			return new Card(0,3,myContext);
-		case 4:
-			return new Card(0,4,myContext);
-		case 5:
-			return new Card(0,5,myContext);
-		case 6:
-			return new Card(0,6,myContext);
-		case 7:
-			return new Card(0,7,myContext);
-		case 8:
-			return new Card(0,8,myContext);
-		case 9:
-			return new Card(0,9,myContext);
-		case 10:
-			return new Card(0,10,myContext);
-		case 11:
-			return new Card(0,11,myContext);
-		case 12:
-			return new Card(0,12,myContext);
-		case 13:
-			return new Card(1,0,myContext);
-		case 14:
-			return new Card(1,1,myContext);
-		case 15:
-			return new Card(1,2,myContext);
-		case 16:
-			return new Card(1,3,myContext);
-		case 17:
-			return new Card(1,4,myContext);
-		case 18:
-			return new Card(1,5,myContext);
-		case 19:
-			return new Card(1,6,myContext);
-		case 20:
-			return new Card(1,7,myContext);
-		case 21:
-			return new Card(1,8,myContext);
-		case 22:
-			return new Card(1,9,myContext);
-		case 23:
-			return new Card(1,10,myContext);
-		case 24:
-			return new Card(1,11,myContext);
-		case 25:
-			return new Card(1,12, myContext);
-		case 26:
-			return new Card(2,0,myContext);
-		case 27:
-			return new Card(2,1, myContext);
-		case 28:
-			return new Card(2,2,myContext);
-		case 29:
-			return new Card(2,3, myContext);
-		case 30:
-			return new Card(2,4,myContext);
-		case 31:
-			return new Card(2,5, myContext);
-		case 32:
-			return new Card(2,6, myContext);
-		case 33:
-			return new Card(2,7,myContext);
-		case 34:
-			return new Card(2,8,myContext);
-		case 35:
-			return new Card(2,9,myContext);
-		case 36:
-			return new Card(2,10,myContext);
-		case 37:
-			return new Card(2,11,myContext);
-		case 38:
-			return new Card(2,12, myContext);
-		case 39:
-			return new Card(3,0, myContext);
-		case 40:
-			return new Card(3,1,myContext);
-		case 41:
-			return new Card(3,2,myContext);
-		case 42:
-			return new Card(3,3,myContext);
-		case 43:
-			return new Card(3,4,myContext);
-		case 44:
-			return new Card(3,5,myContext);
-		case 45:
-			return new Card(3,6,myContext);
-		case 46:
-			return new Card(3,7,myContext);
-		case 47:
-			return new Card(3,8,myContext);
-		case 48:
-			return new Card(3,9,myContext);
-		case 49:
-			return new Card(3,10, myContext);
-		case 50:
-			return new Card(3,11,myContext);
-		case 51:
-			return new Card(3,12, myContext);
+	@Override
+	public void onPause() {
+		super.onPause();
+		isPaused = true;
+	}
+	@Override
+	public void onResume() {
+		super.onResume();
+		isPaused = false;
+	}
+	
+	public void endGame(int b) {
+		String text = "Congratulations; you won!";
+		int place = 6;
+		if(b > highScore1) {
+			place = 1;
+		} else if(b > highScore2) {
+			place = 2;
+		} else if(b > highScore3) {
+			place = 3;
+		} else if(b > highScore4) {
+			place = 4;
+		} else if(b > highScore5) {
+			place = 5;
 		}
-		return null;
+		if(place >=5) {
+			text+= "\nYou made it onto the highscores board!\nYou are number" + place + "!";
+		}
+		
+		
+		vicText.setText(text);
+		victory.setVisibility(victory.VISIBLE);
+		closeVic.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				isPaused = true;
+				victory.setVisibility(victory.INVISIBLE);
+				Intent i = new Intent(getApplicationContext(), highscores_view.class);
+				i.putExtra("highscore1", highScore1);
+				i.putExtra("highscore1", highScore1);
+				i.putExtra("highscore2", highScore2);
+				i.putExtra("highscore3", highScore3);
+				i.putExtra("highscore4", highScore4);
+				i.putExtra("highscore5", highScore5);
+				i.putExtra("highscorename1", highScoreName1);
+				i.putExtra("highscorename2", highScoreName2);
+				i.putExtra("highscorename3", highScoreName3);
+				i.putExtra("highscorename4", highScoreName4);
+				i.putExtra("highscorename5", highScoreName5);
+				i.putExtra("boolAdd", true);
+				i.putExtra("boolStay", false);
+				i.putExtra("yourscore", score);
+				String name = getName.getText().toString();
+				i.putExtra("yourname", name);
+				startActivityForResult(i, HIGHSCORES);
+			}
+		});
+		openHighScores.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+					// TODO Auto-generated method stub
+				isPaused = true;
+					Intent i = new Intent(getApplicationContext(), highscores_view.class);
+					i.putExtra("highscore1", highScore1);
+					i.putExtra("highscore2", highScore2);
+					i.putExtra("highscore3", highScore3);
+					i.putExtra("highscore4", highScore4);
+					i.putExtra("highscore5", highScore5);
+					i.putExtra("highscorename1", highScoreName1);
+					i.putExtra("highscorename2", highScoreName2);
+					i.putExtra("highscorename3", highScoreName3);
+					i.putExtra("highscorename4", highScoreName4);
+					i.putExtra("highscorename5", highScoreName5);
+					i.putExtra("boolAdd", true);
+					i.putExtra("boolStay", true);
+					i.putExtra("yourscore", score);
+					String name = getName.getText().toString();
+					i.putExtra("yourname", name);
+					startActivityForResult(i, HIGHSCORES);
+			}
+		});
+		
+		
+	}
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		isPaused = false;
+		if(requestCode == HIGHSCORES) {
+			if(resultCode == RESULT_OK) {
+				boolean checker = data.getBooleanExtra("boolAdd", false);
+				if(checker == true) {
+					highScore1 = data.getIntExtra("highscore1", 0);
+					highScore2 = data.getIntExtra("highscore2", 0);
+					highScore3 = data.getIntExtra("highscore3", 0);
+					highScore4 = data.getIntExtra("highscore4", 0);
+					highScore5 = data.getIntExtra("highscore5", 0);
+					highScoreName1 = data.getStringExtra("highscorename1");
+					highScoreName2 = data.getStringExtra("highscorename2");
+					highScoreName3 = data.getStringExtra("highscorename3");
+					highScoreName4 = data.getStringExtra("highscorename4");
+					highScoreName5 = data.getStringExtra("highscorenmae5");
+				}
+			}
+		}
+	}
+	
+	public void newGame() {
+		deck.shuffle();
+		ArrayList<Card> newDeck = deck.getDeck();
+		
+		score = 0;
+		scor.setText("Score: " + score);
+		
+		ArrayList<Card> newStackOne = new ArrayList<Card>(),
+				newStackTwo = new ArrayList<Card>(),
+				newStackThree = new ArrayList<Card>(),
+				newStackFour = new ArrayList<Card>(),
+				newStackFive = new ArrayList<Card>(),
+				newStackSix = new ArrayList<Card>(),
+				newStackSeven = new ArrayList<Card>();
+		ArrayList<Card> newStackHearts = new ArrayList<Card>(),
+				newStackDiamonds = new ArrayList<Card>(),
+				newStackClubs = new ArrayList<Card>(),
+				newStackSpades = new ArrayList<Card>();
+		ArrayList<Card> newBackCards = new ArrayList<Card>(), newFrontCards = new ArrayList<Card>();
+		
+		for(int i = 0; i < newDeck.size(); i++) {
+				Card temp = newDeck.get(i);
+				if(newStackOne.size() < 1) {
+					newStackOne.add(temp);
+				} else if(newStackTwo.size() < 2) {
+					newStackTwo.add(temp);
+				} else if(newStackThree.size() < 3) {
+					newStackThree.add(temp);
+				} else if(newStackFour.size() < 4) {
+					newStackFour.add(temp);
+				} else if(newStackFive.size() < 5) {
+					newStackFive.add(temp);
+				} else if(newStackSix.size() < 6) {
+					newStackSix.add(temp);
+				} else if(newStackSeven.size() < 7) {
+					newStackSeven.add(temp);
+				} else {
+					newBackCards.add(temp);
+				}
+			}
+		stackOne.restoreStack(newStackOne);
+		stackTwo.restoreStack(newStackTwo);
+		stackThree.restoreStack(newStackThree);
+		stackFour.restoreStack(newStackFour);
+		stackFive.restoreStack(newStackFive);
+		stackSix.restoreStack(newStackSix);
+		stackSeven.restoreStack(newStackSeven);
+		clickDeck.restoreDeck(newBackCards, newFrontCards);
+		stackHearts.restoreStack(newStackHearts);
+		stackDiamonds.restoreStack(newStackDiamonds);
+		stackClubs.restoreStack(newStackClubs);
+		stackSpades.restoreStack(newStackSpades);
+		timeSeconds = 0;
+		
+		//stackOne, stackTwo,stackThree,stackFour,stackFive,stackSix,stackSeven
+		//stackHearts,stackDiamonds,stackClubs,stackSpades
+		//clickDeck
 	}
 }

@@ -3,9 +3,6 @@ package com.cse3345.f13.Baird;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
 //for the extra cards you can pull from.
@@ -25,6 +22,20 @@ public class DrawDeck {
 		frontCards = c;
 		frontCards.setImageResource(R.drawable.no_card);
 		dragger = e;
+	}
+	public void restoreDeck(ArrayList<Card> a, ArrayList<Card> b) {
+		popMe = a;
+		holder = b;
+		if(popMe.size() > 0) {
+			backCards.setImageResource(R.drawable.card_back);
+		} else {
+			backCards.setImageResource(R.drawable.no_card);
+		}
+		if(holder.size() > 0) {
+			frontCards.setImageDrawable(holder.get(holder.size() -1).determineDrawable());
+		} else {
+			frontCards.setImageResource(R.drawable.no_card);
+		}
 	}
 	public void drawThree() {
 		int sizePop = popMe.size();

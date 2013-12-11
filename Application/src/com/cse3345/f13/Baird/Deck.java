@@ -38,7 +38,6 @@ public class Deck {
 				while(swappedOnce == false)
 				{
 					int ran = (int)(Math.random()*(totalNumOfCards-k));
-					Log.d("randomNumber", "" + ran);
 					int rand = ran + k;
 					if(rand < 52 && cards.get(rand).getSwapped() == false ) {
 						swappedOnce = true;
@@ -53,6 +52,14 @@ public class Deck {
 				}
 			}
 		}
+		for(int i = 0; i < totalNumOfCards; i++) {
+			//the swapped feature will work for both shuffling and determining score.
+			cards.get(i).setSwapped(false);
+		}
+	}
+
+	public void restoreDeck(ArrayList<Card> a) {
+		cards = a;
 	}
 	
 	public ArrayList<Card> getDeck() {
