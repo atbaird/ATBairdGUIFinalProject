@@ -102,7 +102,7 @@ public class highscores_view extends Activity{
 			Button returnMe = (Button)findViewById(R.id.returnMe);
 			TextView scores = (TextView)findViewById(R.id.scores);
 			TextView scoreNames = (TextView)findViewById(R.id.scoreNames);
-			scoreNames.setText("Name/n1. "+highScoreName1+"\n2. "+highScoreName2+"\n3."+highScoreName3+"\n4. "+highScoreName4+"\n5. "+highScoreName5);
+			scoreNames.setText("Name\n1. "+highScoreName1+"\n2. "+highScoreName2+"\n3."+highScoreName3+"\n4. "+highScoreName4+"\n5. "+highScoreName5);
 			scores.setText("Score\n"+highScore1+"\n"+highScore2+"\n"+highScore3+"\n"+highScore4+"\n"+highScore5);
 			returnMe.setOnClickListener(new OnClickListener() {
 			

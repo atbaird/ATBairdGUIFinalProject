@@ -9,18 +9,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-  <RelativeLayout
+    <ImageView
+        android:id="@+id/cardImageHold"
+        android:layout_width="76dp"
+        android:layout_height="80dp"
+        android:src="@drawable/blank" />
+
+    <RelativeLayout
         android:id="@+id/linearLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="100dp"
-        android:orientation="vertical" >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/cardImageHold"
+        android:layout_marginLeft="30dp"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/stackOne"
             android:layout_width="76dp"
             android:layout_height="80dp"
-            android:rotation="90"
             android:contentDescription="@string/stackOneDes"
             android:src="@drawable/no_card" />
 
@@ -28,9 +35,8 @@
             android:id="@+id/stackTwo"
             android:layout_width="76dp"
             android:layout_height="80dp"
-            android:layout_marginTop="65dp"
+            android:layout_marginLeft="65dp"
             android:contentDescription="@string/stackTwoDes"
-            android:rotation="90"
             android:scaleType="fitCenter"
             android:src="@drawable/no_card" />
 
@@ -38,9 +44,8 @@
             android:id="@+id/stackThree"
             android:layout_width="76dp"
             android:layout_height="80dp"
-            android:layout_marginTop="130dp"
+            android:layout_marginLeft="130dp"
             android:contentDescription="@string/stackThreeDes"
-            android:rotation="90"
             android:scaleType="fitCenter"
             android:src="@drawable/no_card" />
 
@@ -48,9 +53,8 @@
             android:id="@+id/stackFour"
             android:layout_width="76dp"
             android:layout_height="80dp"
-            android:layout_marginTop="195dp"
+            android:layout_marginLeft="195dp"
             android:contentDescription="@string/stackFourDes"
-            android:rotation="90"
             android:scaleType="fitCenter"
             android:src="@drawable/no_card" />
 
@@ -58,9 +62,8 @@
             android:id="@+id/stackFive"
             android:layout_width="76dp"
             android:layout_height="80dp"
-            android:layout_marginTop="260dp"
+            android:layout_marginLeft="260dp"
             android:contentDescription="@string/stackFiveDes"
-            android:rotation="90"
             android:scaleType="fitCenter"
             android:src="@drawable/no_card" />
 
@@ -68,9 +71,8 @@
             android:id="@+id/stackSix"
             android:layout_width="76dp"
             android:layout_height="80dp"
-            android:layout_marginTop="325dp"
+            android:layout_marginLeft="325dp"
             android:contentDescription="@string/stackSixDes"
-            android:rotation="90"
             android:scaleType="fitCenter"
             android:src="@drawable/no_card" />
 
@@ -78,27 +80,16 @@
             android:id="@+id/stackSeven"
             android:layout_width="76dp"
             android:layout_height="80dp"
-            android:layout_marginTop="390dp"
+            android:layout_marginLeft="390dp"
             android:contentDescription="@string/stackSevenDes"
-            android:rotation="90"
             android:scaleType="fitCenter"
             android:src="@drawable/no_card" />
-
-      
-
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/cardImageHold"
-        android:layout_width="76dp"
-        android:layout_height="80dp"
-        android:rotation="90"
-        android:src="@drawable/blank" />
-    
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignLeft="@+id/cardImageHold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayout1"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal" >
 
@@ -106,174 +97,152 @@
             android:id="@+id/new_game"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="20dp"
-            android:rotation="90"
             android:text="@string/new_game"
             android:textSize="@dimen/font_size" />
-        
-        <TextView
-            android:id="@+id/score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:rotation="90"
-            android:text="@string/score" />
+
         <TextView
             android:id="@+id/tempHolder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/new_game"
-            android:layout_marginTop="28dp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/new_game"
             android:drawableBottom="@drawable/no_card"
-            android:rotation="90"
             android:text="@string/cardHolder" />
 
         <Button
             android:id="@+id/highScoreButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="24dp"
-            android:rotation="90"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="32dp"
             android:text="@string/highScoreButtonText"
             android:textSize="@dimen/font_size" />
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="51dp"
+            android:layout_toRightOf="@+id/tempHolder"
+            android:text="@string/score" />
 
         <TextView
             android:id="@+id/timerShow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/score"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="58dp"
-            android:rotation="90"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="56dp"
+            android:layout_toRightOf="@+id/score"
             android:text="@string/timerText" />
-
     </RelativeLayout>
 
-     <RelativeLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/relativeLayout1"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/leftOverDeck"
+            android:layout_width="76dp"
+            android:layout_height="80dp"
+            android:contentDescription="@string/lefDeck"
+            android:scaleType="fitCenter"
+            android:src="@drawable/card_back" />
+
+        <ImageView
+            android:id="@+id/showOverDeck"
+            android:layout_width="76dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="70dp"
+            android:contentDescription="@string/lefDeckup"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card" />
+
+        <ImageView
+            android:id="@+id/stackSpades"
+            android:layout_width="76dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="170dp"
+            android:contentDescription="@string/spadeDes"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card_spade" />
+
+        <ImageView
+            android:id="@+id/stackClubs"
+            android:layout_width="76dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="240dp"
+            android:contentDescription="@string/clubDes"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card_club" />
+
+        <ImageView
+            android:id="@+id/stackDiamonds"
+            android:layout_width="76dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="310dp"
+            android:contentDescription="@string/diamondDes"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card_diamond" />
+
+        <ImageView
+            android:id="@+id/stackHearts"
+            android:layout_width="76dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="380dp"
+            android:contentDescription="@string/heartDes"
+            android:scaleType="fitCenter"
+            android:src="@drawable/no_card_heart" />
+    </RelativeLayout>
+    
+    <RelativeLayout
          android:id="@+id/Victory"
-         android:layout_width="150dp"
-         android:layout_height="200dp"
+         android:layout_width="200dp"
+         android:layout_height="150dp"
          android:layout_centerHorizontal="true"
          android:layout_centerVertical="true"
          android:background="@drawable/black_border" >
-
-        <TextView
-            android:id="@+id/VictoryText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:rotation="90"
-            android:text="@string/victory"
-            android:textSize="@dimen/font_size" />
-        
-        <Button
-            android:id="@+id/closeVictory"
-            android:layout_width="50dp"
-            android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="14dp"
-            android:rotation="90"
-            android:text="@string/close"
-            android:textSize="@dimen/font_size" />
 
         <Button
             android:id="@+id/openHighScores"
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="15dp"
-            android:rotation="90"
+            android:layout_alignParentRight="true"
             android:text="@string/highScoreButtonText"
+            android:textSize="@dimen/font_size" />
+
+        <Button
+            android:id="@+id/closeVictory"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:text="@string/close"
+            android:textSize="@dimen/font_size" />
+
+        <TextView
+            android:id="@+id/VictoryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="14dp"
+            android:text="@string/victory"
             android:textSize="@dimen/font_size" />
 
         <EditText
             android:id="@+id/yourName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/VictoryText"
-            android:layout_alignBottom="@+id/VictoryText"
-            android:layout_alignLeft="@+id/closeVictory"
+            android:layout_above="@+id/openHighScores"
+            android:layout_toRightOf="@+id/closeVictory"
             android:hint="@string/name"
-            android:rotation="90"
             android:textSize="@dimen/font_size" />
 
      </RelativeLayout>
 
-     <RelativeLayout
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignTop="@+id/linearLayout1"
-         android:layout_marginLeft="26dp"
-         android:layout_toRightOf="@+id/linearLayout1"
-         android:orientation="vertical" >
-
-         <ImageView
-             android:id="@+id/leftOverDeck"
-             android:layout_width="76dp"
-             android:layout_height="80dp"
-             android:contentDescription="@string/lefDeck"
-             android:rotation="90"
-             android:scaleType="fitCenter"
-             android:src="@drawable/card_back" />
-
-         <ImageView
-             android:id="@+id/showOverDeck"
-             android:layout_width="76dp"
-             android:layout_height="80dp"
-             android:layout_marginTop="70dp"
-             android:contentDescription="@string/lefDeckup"
-             android:rotation="90"
-             android:scaleType="fitCenter"
-             android:src="@drawable/no_card" />
-
-         <ImageView
-             android:id="@+id/stackSpades"
-             android:layout_width="76dp"
-             android:layout_height="80dp"
-             android:layout_marginTop="170dp"
-             android:contentDescription="@string/spadeDes"
-             android:rotation="90"
-             android:scaleType="fitCenter"
-             android:src="@drawable/no_card_spade" />
-
-         <ImageView
-             android:id="@+id/stackClubs"
-             android:layout_width="76dp"
-             android:layout_height="80dp"
-             android:layout_marginTop="240dp"
-             android:contentDescription="@string/clubDes"
-             android:rotation="90"
-             android:scaleType="fitCenter"
-             android:src="@drawable/no_card_club" />
-
-         <ImageView
-             android:id="@+id/stackDiamonds"
-             android:layout_width="76dp"
-             android:layout_height="80dp"
-             android:layout_marginTop="310dp"
-             android:contentDescription="@string/diamondDes"
-             android:rotation="90"
-             android:scaleType="fitCenter"
-             android:src="@drawable/no_card_diamond" />
-
-         <ImageView
-             android:id="@+id/stackHearts"
-             android:layout_width="76dp"
-             android:layout_height="80dp"
-             android:layout_marginTop="380dp"
-             android:contentDescription="@string/heartDes"
-             android:rotation="90"
-             android:scaleType="fitCenter"
-             android:src="@drawable/no_card_heart" />
-     </RelativeLayout>
-    
 </RelativeLayout>

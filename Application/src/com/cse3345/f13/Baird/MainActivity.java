@@ -1145,6 +1145,7 @@ public class MainActivity extends Activity {
 		stackClubs.restoreStack(newStackClubs);
 		stackSpades.restoreStack(newStackSpades);
 		timeSeconds = 0;
+		timerText.setText("Time: "+ timeSeconds + "s");
 		
 		//stackOne, stackTwo,stackThree,stackFour,stackFive,stackSix,stackSeven
 		//stackHearts,stackDiamonds,stackClubs,stackSpades
