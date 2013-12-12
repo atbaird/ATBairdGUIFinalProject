@@ -5,20 +5,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.DragEvent;
 import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
-import android.view.View.OnDragListener;
-import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -244,6 +237,7 @@ public class MainActivity extends Activity {
 						checkClick = true;
 						returnTo = index;
 						myImage.setBackgroundColor(myContext.getResources().getColor(R.color.yellow));
+						imageView = myImage;
 					}
 				} else {
 					if(returnTo == index) {
@@ -266,31 +260,7 @@ public class MainActivity extends Activity {
 										temp = null;
 										tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null,draw1);
 										checkClick = false;
-										if(returnTo == 0) {
-											imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										} else if(returnTo == 1) {
-											imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										} else if(returnTo == 2) {
-											imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										} else if(returnTo == 3) {
-											imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										}else if (returnTo == 4) {
-											imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										}else if (returnTo ==5) {
-											imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										}else if (returnTo == 6) {
-											imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										} else if(returnTo == 7) {
-											imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										} else if(returnTo == 8) {
-											imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										} else if(returnTo == 9) {
-											imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										} else if(returnTo == 10) {
-											imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										}else if(returnTo == 11) {
-											imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										}
+										imageView.setBackgroundColor(myContext.getResources().getColor(R.color.white));
 										
 									}
 								}
@@ -301,31 +271,7 @@ public class MainActivity extends Activity {
 										temp = null;
 										tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null,draw1);
 										checkClick = false;
-										if(returnTo == 0) {
-											imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										} else if(returnTo == 1) {
-											imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										} else if(returnTo == 2) {
-											imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										} else if(returnTo == 3) {
-											imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										}else if (returnTo == 4) {
-											imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										}else if (returnTo ==5) {
-											imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										}else if (returnTo == 6) {
-											imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										} else if(returnTo == 7) {
-											imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										} else if(returnTo == 8) {
-											imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										} else if(returnTo == 9) {
-											imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										} else if(returnTo == 10) {
-											imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										}else if(returnTo == 11) {
-											imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-										}
+										imageView.setBackgroundColor(myContext.getResources().getColor(R.color.white));
 									}
 								}
 							}
@@ -335,32 +281,7 @@ public class MainActivity extends Activity {
 								temp = null;
 								tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null,draw1);
 								checkClick = false;
-								
-								if(returnTo == 0) {
-									imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 1) {
-									imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 2) {
-									imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 3) {
-									imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo == 4) {
-									imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo ==5) {
-									imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo == 6) {
-									imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 7) {
-									imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 8) {
-									imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 9) {
-									imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 10) {
-									imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if(returnTo == 11) {
-									imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}
+								imageView.setBackgroundColor(myContext.getResources().getColor(R.color.white));
 							}
 						}
 					}
@@ -386,6 +307,7 @@ public class MainActivity extends Activity {
 					if(temp != null) {
 						tempHolder.setCompoundDrawablesWithIntrinsicBounds(null, null, null, temp.determineDrawable());
 						returnTo = 7;
+						imageView = imageDrawDeckTwo;
 						checkClick = true;
 						imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.yellow));
 					}
@@ -424,12 +346,16 @@ public class MainActivity extends Activity {
 				ImageView myImage = (ImageView)v;
 				if(myImage == imageSpade) {
 					myStack = stackSpades;
+					index = 8;
 				} else if(myImage == imageClub) {
 					myStack = stackClubs;
+					index = 9;
 				} else if(myImage == imageDiamond) {
 					myStack = stackDiamonds;
+					index = 10;
 				} else if(myImage == imageHeart){
 					myStack = stackHearts;
+					index = 11;
 				}
 				
 				if(checkClick == false) {
@@ -437,12 +363,13 @@ public class MainActivity extends Activity {
 					if(temp != null) {
 						temp = myStack.removeTopCard();
 						tempHolder.setCompoundDrawablesWithIntrinsicBounds(null, null, null, temp.determineDrawable());
-						returnTo = 8;
+						returnTo = index;
 						checkClick = true;
 						myImage.setBackgroundColor(myContext.getResources().getColor(R.color.yellow));
+						imageView = myImage;
 					}
 				} else {
-					if(returnTo == 8) {
+					if(returnTo == index) {
 						myStack.addCard(temp);
 						tempHolder.setCompoundDrawablesWithIntrinsicBounds(null, null, null, draw1);
 						checkClick = false;
@@ -471,31 +398,7 @@ public class MainActivity extends Activity {
 								}
 								temp = null;
 								
-								if(returnTo == 0) {
-									imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 1) {
-									imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 2) {
-									imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 3) {
-									imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo == 4) {
-									imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo ==5) {
-									imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo == 6) {
-									imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 7) {
-									imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 8) {
-									imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 9) {
-									imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 10) {
-									imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if(returnTo == 11) {
-									imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}
+								imageView.setBackgroundColor(myContext.getResources().getColor(R.color.white));
 								
 							}
 							if(temp == null && stackOne.getTopCard() == null && stackTwo.getTopCard() == null && stackThree.getTopCard() == null
@@ -513,31 +416,7 @@ public class MainActivity extends Activity {
 									score = score + 10;
 									scor.setText("Score: "+score);
 								}
-								if(returnTo == 0) {
-									imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 1) {
-									imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 2) {
-									imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 3) {
-									imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo == 4) {
-									imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo ==5) {
-									imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo == 6) {
-									imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 7) {
-									imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 8) {
-									imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 9) {
-									imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 10) {
-									imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if(returnTo == 11) {
-									imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}
+								imageView.setBackgroundColor(myContext.getResources().getColor(R.color.white));
 								temp = null;
 							} else if(myStack == stackClubs && suit1 == 1 && num1 == 0) {
 								myStack.addCard(temp);
@@ -548,31 +427,7 @@ public class MainActivity extends Activity {
 									score = score + 10;
 									scor.setText("Score: "+score);
 								}
-								if(returnTo == 0) {
-									imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 1) {
-									imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 2) {
-									imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 3) {
-									imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo == 4) {
-									imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo ==5) {
-									imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo == 6) {
-									imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 7) {
-									imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 8) {
-									imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 9) {
-									imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 10) {
-									imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if(returnTo == 11) {
-									imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}
+								imageView.setBackgroundColor(myContext.getResources().getColor(R.color.white));
 							} else if(myStack == stackDiamonds && suit1 == 2 && num1 == 0) {
 								myStack.addCard(temp);
 								checkClick = false;
@@ -582,31 +437,7 @@ public class MainActivity extends Activity {
 									score = score + 10;
 									scor.setText("Score: "+score);
 								}
-								if(returnTo == 0) {
-									imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 1) {
-									imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 2) {
-									imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 3) {
-									imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo == 4) {
-									imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo ==5) {
-									imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo == 6) {
-									imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 7) {
-									imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 8) {
-									imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 9) {
-									imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 10) {
-									imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if(returnTo == 11) {
-									imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}
+								imageView.setBackgroundColor(myContext.getResources().getColor(R.color.white));
 							} else if(myStack == stackHearts && suit1 == 3 && num1 == 0) {
 								myStack.addCard(temp);
 								checkClick = false;
@@ -616,31 +447,7 @@ public class MainActivity extends Activity {
 									score = score + 10;
 									scor.setText("Score: "+score);
 								}
-								if(returnTo == 0) {
-									imageStackOne.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 1) {
-									imageStackTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 2) {
-									imageStackThree.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 3) {
-									imageStackFour.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo == 4) {
-									imageStackFive.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo ==5) {
-									imageStackSix.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if (returnTo == 6) {
-									imageStackSeven.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 7) {
-									imageDrawDeckTwo.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 8) {
-									imageSpade.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 9) {
-									imageClub.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								} else if(returnTo == 10) {
-									imageDiamond.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}else if(returnTo == 11) {
-									imageHeart.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-								}
+								imageView.setBackgroundColor(myContext.getResources().getColor(R.color.white));
 							}
 						}
 					}
