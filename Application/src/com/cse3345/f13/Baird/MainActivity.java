@@ -5,13 +5,20 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
+import android.view.View.OnDragListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -239,7 +246,7 @@ public class MainActivity extends Activity {
 						tempHolder.setCompoundDrawablesWithIntrinsicBounds(null, null, null, draw1);
 						checkClick = false;
 						temp = null;
-						myImage.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+						imageView.setBackgroundColor(myContext.getResources().getColor(R.color.white));
 					}
 				}
 			}
@@ -337,7 +344,7 @@ public class MainActivity extends Activity {
 						}
 						tempHolder.setCompoundDrawablesWithIntrinsicBounds(null, null, null, draw1);
 						temp = null;
-						myImage.setBackgroundColor(myContext.getResources().getColor(R.color.white));
+						imageView.setBackgroundColor(myContext.getResources().getColor(R.color.white));
 					}
 					if(temp == null && stackOne.getTopCard() == null && stackTwo.getTopCard() == null && stackThree.getTopCard() == null
 							&& stackFour.getTopCard()==null && stackFive.getTopCard() == null && stackSix.getTopCard() == null 
@@ -411,9 +418,9 @@ public class MainActivity extends Activity {
 			}
 		});
 		
-		/*
 		//Drag Clicking for the imageViews
 		//I used this in order to create my click and drag capabilities: http://mobile.tutsplus.com/tutorials/android/android-sdk-implementing-drag-and-drop-functionality/
+		/*
 		OnTouchListener cardDraggerTouch = new OnTouchListener() {
 
 			@Override
@@ -421,6 +428,33 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				if (m.getAction() == MotionEvent.ACTION_DOWN) {
 					int b = ((Integer)v.getTag());
+					ImageView imag = (ImageView)v;
+					if(imag == imageStackOne) {
+						returnTo = 0;
+					} else if(imag == imageStackTwo) {
+						returnTo = 1;
+					} else if(imag == imageStackThree) {
+						returnTo = 2;
+					} else if(imag == imageStackFour) {
+						returnTo = 3;
+					} else if(imag == imageStackFive) {
+						returnTo = 4;
+					} else if(imag == imageStackSix) {
+						returnTo =5; 
+					} else if(imag == imageStackSeven) {
+						returnTo = 6;
+					} else if(imag == imageDrawDeckTwo) {
+						returnTo = 7;
+					} else if(imag == imageSpade) {
+						returnTo = 8;
+					} else if(imag == imageClub) {
+						returnTo = 9;
+					} else if(imag == imageDiamond) {
+						returnTo = 10;
+					} else if(imag == imageHeart) {
+						returnTo = 11;
+					}
+					
 					ClipData data = ClipData.newPlainText("", "" + b);
 					DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
 					v.startDrag(data, shadowBuilder, v, 0);
@@ -443,13 +477,10 @@ public class MainActivity extends Activity {
 		imageClub.setOnTouchListener(cardDraggerTouch);
 		imageSpade.setOnTouchListener(cardDraggerTouch);
 		
-		
 		OnDragListener cardDragListener = new OnDragListener() {
 
 			@Override
 			public boolean onDrag(View v, DragEvent event) {
-				DrawDeck clicky = null;
-				Stack myStack = null;
 					// TODO Auto-generated method stub
 					switch (event.getAction()) {
 				    case DragEvent.ACTION_DRAG_STARTED:
@@ -458,17 +489,20 @@ public class MainActivity extends Activity {
 					case DragEvent.ACTION_DRAG_ENTERED:
 				        //no action necessary
 						Log.d("Drag", "I have entered; v = " + v);
-				        break;
+						return true;
 				    case DragEvent.ACTION_DRAG_EXITED:
 				        //no action necessary
-				        break;
+				    	return true;
 				    case DragEvent.ACTION_DROP:
 				    	View view = (View) event.getLocalState();
 				    	view.setVisibility(View.INVISIBLE);
 				    	ImageView dropTarget = (ImageView) view;
-				    	ImageView dropped = (ImageView) v;
-				    	returnTo = isWhatStack(dropped);
 				    	int returnTo2 = isWhatStack(dropTarget);
+				    	
+				    	DrawDeck clicky = null;
+						Stack myStack = null;
+				    	Stack myStackTwo = null;
+				    	
 				    	if(returnTo == 0) {
 				    		myStack = stackOne;
 				    	} else if(returnTo == 1) {
@@ -494,7 +528,7 @@ public class MainActivity extends Activity {
 				    	} else if(returnTo == 11) {
 				    		myStack = stackHearts;
 				    	}
-				    	Stack myStackTwo = null;
+				    	
 				    	if(returnTo2 == 0) {
 				    		myStackTwo = stackOne;
 				    	} else if(returnTo2 == 1) {
@@ -519,85 +553,50 @@ public class MainActivity extends Activity {
 				    		myStackTwo = stackHearts;
 				    	}
 				    	if(myStack != null && myStackTwo != null) {
-				    		
-				    		Card card1 = null;
-				    		if(returnTo == 7) {
-				    			card1 = clicky.getTopCard();
-				    		} else {
-				    			card1 = myStack.getTopCard();
+				    		if(returnTo > 7 || returnTo < 7) {
+					    		Card card1 = myStack.getTopCard();
+					    		boolean test = myStackTwo.addCardSorted(card1, returnTo, returnTo2);
+					    		if(test == true) {
+					    			if(returnTo2 > 7) {
+					    				if(card1.getSwapped() == false) {
+											card1.setSwapped(true);
+											if(card1.getNumber() == 12) {
+												score = score + 100;
+											} else {
+												score = score + 10;
+											}
+											scor.setText("Score: "+score);
+										}
+					    			}
+					    			myStack.removeTopCard();
+					    		}
 				    		}
-				    		if(returnTo2 != 7 && card1 != null) {
-				    			Card card2 = myStackTwo.getTopCard();
-				    		
-				    			if(returnTo < 8 && returnTo2 < 7) {
-				    				if(card2 == null && card1.getNumber() == 12) {
-				    					myStackTwo.addCard(card1);
-				    					myStack.removeTopCard();
-				    				}
-				    				else if((card1.getSuit() == 0|| card1.getSuit() == 1) && (card2.getSuit() == 2 || card2.getSuit() == 3)){
-				    					if(card1.getNumber() == card2.getNumber() - 1) {
-				    						myStack.removeTopCard();
-				    						myStackTwo.addCard(card1);
-				    					} else {
-				    					}
-				    				} else {
-				    				}
-				    			} else if(returnTo < 7 && returnTo2 >= 8) {
-				    				if(card2 == null) {
-				    					if(card1.getNumber() == 0 && myStackTwo.getStackSuit() == card1.getSuit()) {
-				    						myStackTwo.addCard(card1);
-				    						myStack.removeTopCard();
-				    					}
-				    				} else if(card2.getSuit() == card1.getSuit()) {
-				    					if(card2.getNumber() + 1 == card1.getNumber()) {
-				    						myStack.removeTopCard();
-				    						myStackTwo.addCard(card1);
-				    					} else {
-				    					}
-				    				} else {
-				    				}
-				    			} else if(returnTo >= 8 && returnTo2 >= 8) {
-				    				return true;
-				    			} else if(returnTo == 7 && returnTo2 >= 8) {
-				    				if(card2 == null) {
-				    					if(card1.getNumber() == 0 && myStackTwo.getStackSuit() == card1.getSuit()) {
-				    						myStackTwo.addCard(card1);
-				    						clicky.removeTopCard();
-				    					}
-				    				} else if(card2.getSuit() == card1.getSuit()) {
-				    					if(card2.getNumber() + 1 == card1.getNumber()) {
-				    						clicky.removeTopCard();
-				    						myStackTwo.addCard(card1);
-				    					} else {
-				    					}
-				    				} else {
-				    				}
-				    			} else if(returnTo == 7 && returnTo2 < 7) {
-				    				if(card2 == null && card1.getNumber() == 12) {
-				    					myStackTwo.addCard(card1);
-				    					clicky.removeTopCard();
-				    				}
-				    				else if((card1.getSuit() == 0|| card1.getSuit() == 1) && (card2.getSuit() == 2 || card2.getSuit() == 3)){
-				    					if(card1.getNumber() == card2.getNumber() - 1) {
-				    						clicky.removeTopCard();
-				    						myStackTwo.addCard(card1);
-				    					} else {
-				    					}
-				    				} else {
-				    				}
+				    	} else if(myStackTwo != null && clicky != null) {
+				    		Card card1 = clicky.getTopCard();
+				    		boolean test = myStackTwo.addCardSorted(card1, returnTo, returnTo2);
+				    		if(test == true) {
+				    			if(returnTo2 > 7) {
+				    				if(card1.getSwapped() == false) {
+										card1.setSwapped(true);
+										if(card1.getNumber() == 12) {
+											score = score + 100;
+										} else {
+											score = score + 10;
+										}
+										scor.setText("Score: "+score);
+									}
 				    			}
-				    		} else {
+				    			clicky.removeTopCard();
 				    		}
 				    	}
 				    	return true;
 				        //handle the dragged view being dropped over a drop view
 				    case DragEvent.ACTION_DRAG_ENDED:
 				        //no action necessary
-				        break;
+				    	return true;
 				    default:
-				        break;
+				    	return true;
 					}
-				return false;
 			}
 			
 			public int isWhatStack(ImageView k) {
@@ -639,8 +638,7 @@ public class MainActivity extends Activity {
 		imageHeart.setOnDragListener(cardDragListener);
 		imageDiamond.setOnDragListener(cardDragListener);
 		imageClub.setOnDragListener(cardDragListener);
-		imageSpade.setOnDragListener(cardDragListener);
-		*/
+		imageSpade.setOnDragListener(cardDragListener);*/
 	}
 	
 	@Override
