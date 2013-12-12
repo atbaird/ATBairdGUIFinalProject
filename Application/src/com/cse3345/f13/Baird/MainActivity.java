@@ -407,7 +407,7 @@ public class MainActivity extends Activity {
 								endGame(score);
 							}
 						} else {
-							if(myStack == stackSpades && suit1 == 0 && num1 == 0) {
+							if(suit1 == myStack.getStackSuit() && num1 == 0) {
 								myStack.addCard(temp);
 								checkClick = false;
 								tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null,draw1);
@@ -418,36 +418,6 @@ public class MainActivity extends Activity {
 								}
 								imageView.setBackgroundColor(myContext.getResources().getColor(R.color.white));
 								temp = null;
-							} else if(myStack == stackClubs && suit1 == 1 && num1 == 0) {
-								myStack.addCard(temp);
-								checkClick = false;
-								tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null,draw1);
-								if(temp.getSwapped() == false) {
-									temp.setSwapped(true);
-									score = score + 10;
-									scor.setText("Score: "+score);
-								}
-								imageView.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-							} else if(myStack == stackDiamonds && suit1 == 2 && num1 == 0) {
-								myStack.addCard(temp);
-								checkClick = false;
-								tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null,draw1);
-								if(temp.getSwapped() == false) {
-									temp.setSwapped(true);
-									score = score + 10;
-									scor.setText("Score: "+score);
-								}
-								imageView.setBackgroundColor(myContext.getResources().getColor(R.color.white));
-							} else if(myStack == stackHearts && suit1 == 3 && num1 == 0) {
-								myStack.addCard(temp);
-								checkClick = false;
-								tempHolder.setCompoundDrawablesWithIntrinsicBounds(null,null,null,draw1);
-								if(temp.getSwapped() == false) {
-									temp.setSwapped(true);
-									score = score + 10;
-									scor.setText("Score: "+score);
-								}
-								imageView.setBackgroundColor(myContext.getResources().getColor(R.color.white));
 							}
 						}
 					}
