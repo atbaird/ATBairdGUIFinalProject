@@ -22,9 +22,6 @@ public class MainActivity extends Activity {
 
 	public static final int HIGHSCORES = 120;
 	
-	private static final String IMAGEVIEW_TAG = "icon bitmap";
-
-	
 	static final String value1 = "hScore1";
 	static final String value2 = "hScore2";
 	static final String value3 = "hScore3";
