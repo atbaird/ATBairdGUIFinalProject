@@ -53,6 +53,66 @@ public class Stack {
 		cardStack.add(b);
 		stack.setImageDrawable(cardStack.get(cardStack.size()-1).determineDrawable());
 	}
+	public boolean addCardSorted(Card b, int ret, int ind) {
+		if(isSuitStack == false) {
+			if(ret == ind) {
+				addCard(b);
+				return true;
+			} else {
+				Card myCard = getTopCard();
+				int suit1 = b.getSuit();
+				int num1 = b.getNumber();
+				if(myCard != null) {
+					int suit2 = myCard.getSuit();
+					int num2 = myCard.getNumber();
+					if(suit1 == 0 || suit1 == 1) {
+						if(suit2 == 2 || suit2 == 3) {
+							if(num2 == num1 + 1) {
+								addCard(b);
+								return true;
+							}
+						}
+					} else {
+						if(suit2 == 0 || suit2 == 1) {
+							if(num2 == num1 + 1) {
+								addCard(b);
+								return true;
+							}
+						}
+					}
+				} else {
+					if(num1 == 12) {
+						addCard(b);
+						return true;
+					}
+				}
+			}
+		} else {
+			if(ret == ind) {
+				addCard(b);
+				return true;
+			} else {
+				Card myCard = getTopCard();
+				int suit1 = b.getSuit();
+				int num1 = b.getNumber();
+				if(myCard != null)
+				{
+					int suit2 = myCard.getSuit();
+					int num2 = myCard.getNumber();
+					if(suit1 == suit2 && num1 == num2 +1) {
+						addCard(b);
+						return true;
+					}
+				} else {
+					if(suit1 == suit && num1 == 0) {
+						addCard(b);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 	public Card removeTopCard() {
 		if(cardStack.size() > 0) {
 			Card temp = cardStack.get(cardStack.size() -1);
